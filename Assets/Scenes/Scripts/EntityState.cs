@@ -1,5 +1,5 @@
 namespace Scenes.Scripts {
-    public enum DrState {
+    public enum EntityState {
         Alive,
         Dead,
         Sleep

@@ -2,8 +2,6 @@ using System;
 
 namespace Scenes.Scripts {
     public class BotDragon : IDragon {
-
-        
         public BotDragon(int x, int y) {
 
             _x = x;
@@ -24,12 +22,16 @@ namespace Scenes.Scripts {
             throw new NotImplementedException();
         }
 
-        public override (int x, int y) GetCords() {
+        public override (int x, int y) Cords() {
             return (_x, _y);
         }
 
         public override void PerformDecision() {
             throw new NotImplementedException();
+        }
+
+        public override EntityState GetState() {
+            return _state;
         }
     }
 }
