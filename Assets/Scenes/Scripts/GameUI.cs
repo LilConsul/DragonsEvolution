@@ -1,6 +1,5 @@
 using Scenes.Scripts.Field;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Scenes.Scripts {
     public class GameUI : MonoBehaviour {
@@ -17,10 +16,6 @@ namespace Scenes.Scripts {
 
             _generator.GenerateEasy(ref _container);
             _drawer.Draw(_container);
-        }
-
-        private void Update() {
-            //_drawer.Draw(_container);
         }
     }
 }

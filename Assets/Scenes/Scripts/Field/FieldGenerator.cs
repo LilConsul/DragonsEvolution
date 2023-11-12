@@ -15,7 +15,7 @@ namespace Scenes.Scripts.Field {
             for (var i = 0; i < numDragons; i++) {
                 var x = RandomCoordinate(size);
                 var y = RandomCoordinate(size);
-                if (!container.AddDragon(new BotDragon(x, y)))
+                if (!container.Add(new BotDragon(x, y)))
                     i--;
             }
             
@@ -24,7 +24,7 @@ namespace Scenes.Scripts.Field {
                 var x = RandomCoordinate(size);
                 var y = RandomCoordinate(size);
                 var calories = RandomCalories();
-                if (!container.AddFood(new Chicken(x, y, calories)))
+                if (!container.Add(new Chicken(x, y, calories)))
                     i--;
             }
         }

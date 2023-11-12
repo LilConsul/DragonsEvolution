@@ -15,14 +15,14 @@ namespace Scenes.Scripts.Field {
             _dragonsQue = new Queue<IDragon>();
         }
 
-        public bool AddDragon(IDragon dragon) {
+        public bool Add(IDragon dragon) {
             if (dragon == null || !InitializeOnField(dragon))
                 return false;
             _dragonsQue.Enqueue(dragon);
             return true;
         }
 
-        public bool AddFood(IFood food) {
+        public bool Add(IFood food) {
             if (food == null)
                 return false;
             var (x, y) = food.Cords();
@@ -68,7 +68,6 @@ namespace Scenes.Scripts.Field {
         }
 
         public int Size() => _foods.GetLength(1);
-
         private bool InitializeOnField(IDragon dragon) {
             var (x, y) = dragon.Cords();
             if (_dragons[x, y] != null)

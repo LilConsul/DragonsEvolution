@@ -5,10 +5,6 @@ namespace Scenes.Scripts.Field {
     public class FieldDrawer : MonoBehaviour {
         private int _width = 16, _height = 9;
         [SerializeField]private Tile tilePrefab;
-
-        // private void Start() {
-        //     //Draw();
-        // }
         
         public void Draw(FieldContainer fieldContainer = null) {
             if (fieldContainer != null) {
