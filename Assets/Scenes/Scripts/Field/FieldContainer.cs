@@ -1,14 +1,18 @@
 using System.Collections.Generic;
+using Scenes.Scripts.Dragon;
+using Scenes.Scripts.Enums;
+using Scenes.Scripts.Food;
 
-namespace Scenes.Scripts {
-    public class GameField {
+namespace Scenes.Scripts.Field {
+    public class FieldContainer {
         private IDragon[,] _dragons;
         private IFood[,] _foods;
         private Queue<IDragon> _dragonsQue;
 
-        public GameField(uint size) {
+        public FieldContainer(uint size) {
             _dragons = new IDragon[size, size];
             _foods = new IFood[size, size];
+            _dragonsQue = new Queue<IDragon>();
         }
 
         public bool AddDragon(IDragon dragon) {
@@ -18,14 +22,15 @@ namespace Scenes.Scripts {
             return true;
         }
 
-        public void AddFood(IFood food) {
+        public bool AddFood(IFood food) {
             if (food == null)
-                return;
+                return false;
             var (x, y) = food.Cords();
             if (_foods[x, y] != null)
                 food.Add(_foods[x, y]);
 
             _foods[food.Cords().x, food.Cords().y] = food;
+            return true;
         }
 
         public void DeleteFood(int x, int y) {
@@ -61,6 +66,8 @@ namespace Scenes.Scripts {
         public IDragon[,] GetDragonsField() {
             return _dragons;
         }
+
+        public int Size() => _foods.GetLength(1);
 
         private bool InitializeOnField(IDragon dragon) {
             var (x, y) = dragon.Cords();

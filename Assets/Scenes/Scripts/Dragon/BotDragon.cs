@@ -1,9 +1,10 @@
 using System;
+using Scenes.Scripts.Enums;
+using Scenes.Scripts.Food;
 
-namespace Scenes.Scripts {
+namespace Scenes.Scripts.Dragon {
     public class BotDragon : IDragon {
         public BotDragon(int x, int y) {
-
             _x = x;
             _y = y;
         }
@@ -20,10 +21,6 @@ namespace Scenes.Scripts {
                 return;
             //TODO: Eat food;
             throw new NotImplementedException();
-        }
-
-        public override (int x, int y) Cords() {
-            return (_x, _y);
         }
 
         public override void PerformDecision() {
