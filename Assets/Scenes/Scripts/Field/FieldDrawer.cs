@@ -12,7 +12,8 @@ namespace Scenes.Scripts.Field {
         [SerializeField] private Object foodPrefab;
         [SerializeField] private DragonColors dragonsSprite;
 
-        public void DrawField(FieldContainer fieldContainer = null) {
+        public void DrawField() {
+            var fieldContainer = FieldContainer.Instance;
             if (fieldContainer != null) {
                 _width = fieldContainer.Size();
                 _height = fieldContainer.Size();
@@ -32,15 +33,16 @@ namespace Scenes.Scripts.Field {
             }
         }
 
-        public void RenderDragons(FieldContainer fieldContainer) {
-            RenderUnits<BotDragon>(fieldContainer);
+        public void RenderDragons() {
+            RenderUnits<BotDragon>();
         }
         
-        public void RenderFood(FieldContainer fieldContainer) {
-            RenderUnits<Chicken>(fieldContainer);
+        public void RenderFood() {
+            RenderUnits<Chicken>();
         }
 
-        private void RenderUnits<T>(FieldContainer fieldContainer) where T : Component {
+        private void RenderUnits<T>() where T : Component {
+            var fieldContainer = FieldContainer.Instance;
             var units = fieldContainer.GetUnitsField<T>();
             var size = fieldContainer.Size();
             
@@ -52,7 +54,7 @@ namespace Scenes.Scripts.Field {
                     currentTile.IsOccupied = true;
 
                     var unitObject = Instantiate(typeof(T) == typeof(BotDragon) ? dragonPrefab : foodPrefab, new Vector3(i, j, 1f), Quaternion.identity) as GameObject;
-                    var unitComponent = unitObject.GetComponent<T>();
+                    var unitComponent = unitObject!.GetComponent<T>();
 
                     if (unitComponent != null) {
                         if (typeof(T) == typeof(BotDragon)) {

@@ -1,6 +1,4 @@
-using System;
 using Scenes.Scripts.Units;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = System.Random;
 
@@ -12,11 +10,12 @@ namespace Scenes.Scripts.Field {
             _random = new Random();
         }
 
-        public void GenerateEasy(ref FieldContainer container) {
-            CustomGenerator(ref container, 50, 15);
+        public void GenerateEasy() {
+            CustomGenerator( 50, 15);
         }
 
-        private void CustomGenerator(ref FieldContainer container, int numDragons, int numFood) {
+        private void CustomGenerator(int numDragons, int numFood) {
+            var container = FieldContainer.Instance;
             var size = container.Size();
             
             // Generate Dragons

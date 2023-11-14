@@ -4,16 +4,16 @@ using Scenes.Scripts.Units;
 using UnityEngine;
 
 namespace Scenes.Scripts.Field {
-    public class FieldContainer /*: MonoBehaviour*/{
-        //public static FieldContainer Instance;
+    public class FieldContainer : MonoBehaviour{
+        public static FieldContainer Instance;
         private BotDragon[,] _dragons;
         private Chicken[,] _foods;
         private Queue<BotDragon> _dragonsQue;
         
-        /*private void Awake() {
+        private void Awake() {
             Instance = this;
-        }*/
-        public FieldContainer(uint size) {
+        }
+        public void SetSize(uint size) {
             _dragons = new BotDragon[size, size];
             _foods = new Chicken[size, size];
             _dragonsQue = new Queue<BotDragon>();
