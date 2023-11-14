@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Scenes.Scripts {
     public class GameUI : MonoBehaviour {
         [SerializeField]private FieldDrawer fieldDrawerPrefab;
+        [SerializeField]private FieldGenerator fieldGeneratorPrefab;
         
         private FieldDrawer _drawer;
         private FieldGenerator _generator;
@@ -11,7 +12,7 @@ namespace Scenes.Scripts {
 
         private void Awake() {
             _drawer = Instantiate(fieldDrawerPrefab);
-            _generator = new FieldGenerator();
+            _generator = Instantiate(fieldGeneratorPrefab);
             _container = new FieldContainer(15);
         }
 

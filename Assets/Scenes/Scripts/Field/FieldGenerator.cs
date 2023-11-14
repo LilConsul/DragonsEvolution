@@ -1,11 +1,17 @@
 using System;
 using Scenes.Scripts.Dragon;
 using Scenes.Scripts.Food;
+using UnityEngine;
+using Random = System.Random;
 
 namespace Scenes.Scripts.Field {
-    public class FieldGenerator {
-        private Random _random = new Random();
-        
+    public class FieldGenerator : MonoBehaviour {
+        private Random _random;
+
+        private void Awake() {
+            _random  = new Random();
+        }
+
         public void GenerateEasy(ref FieldContainer container) {
             CustomGenerator(ref container, 5, 15);
         }
@@ -15,8 +21,9 @@ namespace Scenes.Scripts.Field {
             for (var i = 0; i < numDragons; i++) {
                 var x = RandomCoordinate(size);
                 var y = RandomCoordinate(size);
-                if (!container.Add(new BotDragon(x, y)))
-                    i--;
+                BotDragon dr = gameObject.AddComponent<BotDragon>();
+                // if (!container.Add(new BotDragon(x, y)))
+                //     i--;
             }
             
             // Generate Food

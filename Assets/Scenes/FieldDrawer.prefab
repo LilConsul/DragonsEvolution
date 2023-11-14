@@ -44,6 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9823ac27cea487c929b49badaa28724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 0
-  _height: 0
-  _tilePrefab: {fileID: 0}
+  tilePrefab: {fileID: 4910660528806947756, guid: 0a211b9b4944c434b9ca38ac4e787f03, type: 3}
+  dragonPrefab: {fileID: 0}
+  dragonsSprite:
+    orange: {fileID: 21300000, guid: 839b178b7b3fe5f489a1daa216c731b4, type: 3}
+    pink: {fileID: 21300000, guid: f907322903baebb418f896c70383b0f5, type: 3}
+    purple: {fileID: 21300000, guid: 7a538466090a16e4fb5c07bf783783da, type: 3}
+    green: {fileID: 21300000, guid: 7008324231552594399d06e97f5edfe7, type: 3}
+    blue: {fileID: 21300000, guid: 0ffa726515a56524fab8e785c2cd201c, type: 3}
+    player: {fileID: 21300000, guid: 652397390386cb64caba44ec19b7f14e, type: 3}

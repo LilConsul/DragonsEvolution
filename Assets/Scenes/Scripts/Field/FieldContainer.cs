@@ -5,17 +5,17 @@ using Scenes.Scripts.Food;
 
 namespace Scenes.Scripts.Field {
     public class FieldContainer {
-        private IDragon[,] _dragons;
+        private BotDragon[,] _dragons;
         private IFood[,] _foods;
-        private Queue<IDragon> _dragonsQue;
+        private Queue<BotDragon> _dragonsQue;
 
         public FieldContainer(uint size) {
-            _dragons = new IDragon[size, size];
+            _dragons = new BotDragon[size, size];
             _foods = new IFood[size, size];
-            _dragonsQue = new Queue<IDragon>();
+            _dragonsQue = new Queue<BotDragon>();
         }
 
-        public bool Add(IDragon dragon) {
+        public bool Add(BotDragon dragon) {
             if (dragon == null || !InitializeOnField(dragon))
                 return false;
             _dragonsQue.Enqueue(dragon);
@@ -37,7 +37,7 @@ namespace Scenes.Scripts.Field {
             _foods[x, y] = null;
         }
 
-        public IDragon GetNextDragon() {
+        public BotDragon GetNextDragon() {
             var next = _dragonsQue.Dequeue();
             _dragons[next.Cords().x, next.Cords().y] = null;
             if (next.GetState() == EntityState.Dead) {
@@ -57,18 +57,18 @@ namespace Scenes.Scripts.Field {
             return _foods;
         }
 
-        public IDragon[,] GetDragonsField(int x, int y, int radius) {
-            var remover = new RadiusRemover<IDragon>();
+        public BotDragon[,] GetDragonsField(int x, int y, int radius) {
+            var remover = new RadiusRemover<BotDragon>();
             var newField = remover.RemoveRadius(_dragons, x, y, radius);
             return newField;
         }
 
-        public IDragon[,] GetDragonsField() {
+        public BotDragon[,] GetDragonsField() {
             return _dragons;
         }
 
         public int Size() => _foods.GetLength(1);
-        private bool InitializeOnField(IDragon dragon) {
+        private bool InitializeOnField(BotDragon dragon) {
             var (x, y) = dragon.Cords();
             if (_dragons[x, y] != null)
                 return false;
