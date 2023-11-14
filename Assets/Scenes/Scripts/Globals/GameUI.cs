@@ -1,7 +1,7 @@
 using Scenes.Scripts.Field;
 using UnityEngine;
 
-namespace Scenes.Scripts {
+namespace Scenes.Scripts.Globals {
     public class GameUI : MonoBehaviour {
         [SerializeField]private FieldDrawer fieldDrawerPrefab;
         [SerializeField]private FieldGenerator fieldGeneratorPrefab;
@@ -20,6 +20,12 @@ namespace Scenes.Scripts {
             _generator.GenerateEasy(ref _container);
             _drawer.DrawField(_container);
             _drawer.RenderDragons(_container);
+            _drawer.RenderFood(_container);
+            InvokeRepeating("BotUpdate", 1.0f, 1.0f);
+        }
+
+        private void BotUpdate() {
+            Debug.Log("Updating every second...");
         }
     }
 }

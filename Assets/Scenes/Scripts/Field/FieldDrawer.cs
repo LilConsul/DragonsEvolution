@@ -33,26 +33,42 @@ namespace Scenes.Scripts.Field {
         }
 
         public void RenderDragons(FieldContainer fieldContainer) {
-            var dragons = fieldContainer.GetDragonsField();
+            RenderUnits<BotDragon>(fieldContainer);
+        }
+        
+        public void RenderFood(FieldContainer fieldContainer) {
+            RenderUnits<Chicken>(fieldContainer);
+        }
+
+        private void RenderUnits<T>(FieldContainer fieldContainer) where T : Component {
+            var units = fieldContainer.GetUnitsField<T>();
             var size = fieldContainer.Size();
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    if (dragons[i, j] != null) {
-                        var currentTile = _spawnedTiles[i, j];
-                        currentTile.IsOccupied = true;
+            
+            for (var i = 0; i < size; i++) {
+                for (var j = 0; j < size; j++) {
+                    if (units[i, j] == null) continue;
 
-                        var dragonObject = Instantiate(dragonPrefab, new Vector3(i, j, 1f), Quaternion.identity) as GameObject;
-                        var botDragon = dragonObject.GetComponent<BotDragon>();
+                    var currentTile = _spawnedTiles[i, j];
+                    currentTile.IsOccupied = true;
 
-                        if (botDragon != null) {
-                            var dragonSprite = dragonsSprite.Get(dragons[i, j].Color);
-                            botDragon.Init(dragonSprite);
-                            dragonObject.transform.parent = currentTile.transform;
-                            dragonObject.name = $"Dragon {i} {j}";
+                    var unitObject = Instantiate(typeof(T) == typeof(BotDragon) ? dragonPrefab : foodPrefab, new Vector3(i, j, 1f), Quaternion.identity) as GameObject;
+                    var unitComponent = unitObject.GetComponent<T>();
+
+                    if (unitComponent != null) {
+                        if (typeof(T) == typeof(BotDragon)) {
+                            var dragonSprite = dragonsSprite.Get((units[i, j] as BotDragon)!.Color);
+                            (unitComponent as BotDragon)?.Init(dragonSprite);
                         }
-                        else {
-                            Debug.LogWarning("The dragon prefab doesn't have a BotDragon component.");
+
+                        if (typeof(T) == typeof(Chicken)) {
+                            // Initialize Chicken 
                         }
+
+                        unitObject.transform.parent = currentTile.transform;
+                        unitObject.name = $"{typeof(T).Name} {i} {j}";
+                    }
+                    else {
+                        Debug.LogWarning($"The prefab doesn't have a {typeof(T).Name} component.");
                     }
                 }
             }

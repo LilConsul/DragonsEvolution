@@ -1,13 +1,19 @@
 using System;
 using Scenes.Scripts.Enums;
+using Scenes.Scripts.Field;
+using Scenes.Scripts.Globals;
 using UnityEngine;
 
 namespace Scenes.Scripts.Units {
     public class BotDragon : MonoBehaviour{
         [SerializeField] private SpriteRenderer _renderer;
-        private EntityState _state = EntityState.Alive;
         private int _x;
         private int _y;
+
+        private int health;
+        
+        
+        private EntityState _state = EntityState.Alive;
         public Colors Color { get; set; }
         public void Initialization(int x, int y) {
             Color = GetRandomColor();
@@ -15,11 +21,14 @@ namespace Scenes.Scripts.Units {
             _y = y;
         }
         
-        public void Move(int newX, int newY) {
-            //TODO: Check if it can move 
+        public bool Move(int newX, int newY) {
             _x = newX;
             _y = newY;
-            throw new System.NotImplementedException();
+            return true;
+        }
+
+        private void HandleMove(int oldX, int oldY, int newX, int newY) {
+            Debug.Log($"Object moved from ({oldX}, {oldY}) to ({newX}, {newY})");
         }
 
         public void Eat(Chicken food) {
