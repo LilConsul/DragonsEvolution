@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 4910660528806947756, guid: 0a211b9b4944c434b9ca38ac4e787f03, type: 3}
-  dragonPrefab: {fileID: 0}
+  dragonPrefab: {fileID: 8170110393401291701, guid: a4963cff3cb652043a018bbd9b585a77, type: 3}
   dragonsSprite:
     orange: {fileID: 21300000, guid: 839b178b7b3fe5f489a1daa216c731b4, type: 3}
     pink: {fileID: 21300000, guid: f907322903baebb418f896c70383b0f5, type: 3}

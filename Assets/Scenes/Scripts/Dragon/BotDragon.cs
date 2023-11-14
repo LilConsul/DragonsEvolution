@@ -2,7 +2,6 @@ using System;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Food;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace Scenes.Scripts.Dragon {
     public class BotDragon : MonoBehaviour{
@@ -11,12 +10,11 @@ namespace Scenes.Scripts.Dragon {
         private int _x;
         private int _y;
         public Colors Color { get; set; }
-        
-        /*public BotDragon(int x, int y) {
-            Color = (Colors)System.Enum.GetValues(typeof(Colors)).Length - 1;
+        public void SetPosition(int x, int y) {
+            Color = GetRandomColor();
             _x = x;
             _y = y;
-        }*/
+        }
         
         public void Move(int newX, int newY) {
             //TODO: Check if it can move 
@@ -40,7 +38,11 @@ namespace Scenes.Scripts.Dragon {
             return _state;
         }
         
+        private Colors GetRandomColor() {
+            var colors = Enum.GetValues(typeof(Colors));
+            return (Colors)colors.GetValue(UnityEngine.Random.Range(0, colors.Length - 1));
+        }
         public (int x, int y) Cords() => (_x, _y);
-        //public void Init(Sprite sprite) => _renderer.sprite = sprite;
+        public void Init(Sprite sprite) => _renderer.sprite = sprite;
     }
 }
