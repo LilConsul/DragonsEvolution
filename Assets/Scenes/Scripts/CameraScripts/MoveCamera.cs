@@ -25,10 +25,10 @@ namespace Scenes.Scripts.CameraScripts {
                 _currentPosition.y -= cameraSpeed / 50;
 
             if (Input.GetKey(KeyCode.A))
-                _currentPosition.x -= cameraSpeed / 50;
+                _currentPosition.x += cameraSpeed / 50;
 
             if (Input.GetKey(KeyCode.D))
-                _currentPosition.x += cameraSpeed / 50;
+                _currentPosition.x -= cameraSpeed / 50;
 
             transform.position = _currentPosition;
         }

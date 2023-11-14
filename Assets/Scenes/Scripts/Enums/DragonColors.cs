@@ -12,10 +12,10 @@ namespace Scenes.Scripts.Enums {
         [SerializeField] private Sprite blue;
         [SerializeField] private Sprite player;
 
-        private Dictionary<Colors, Sprite> colorMap;
-
-        private void Start() {
-            colorMap = new Dictionary<Colors, Sprite> {
+        private Dictionary<Colors, Sprite> _colorMap;
+        
+        public Sprite Get(Colors color) {
+            _colorMap = new Dictionary<Colors, Sprite> {
                 { Colors.Orange, orange },
                 { Colors.Pink, pink },
                 { Colors.Purple, purple },
@@ -23,10 +23,14 @@ namespace Scenes.Scripts.Enums {
                 { Colors.Blue, blue },
                 { Colors.Player, player }
             };
+            return _colorMap[color];
         }
 
-        public Sprite Get(Colors color) {
-            return colorMap[color];
+        public Colors RandomColor() {
+            var randomColor = (Colors)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Colors)).Length - 1);
+            if (randomColor == Colors.Player)
+                return RandomColor();
+            return randomColor;
         }
     }
 }

@@ -5,6 +5,7 @@ using Scenes.Scripts.Food;
 namespace Scenes.Scripts.Dragon {
     public class BotDragon : IDragon {
         public BotDragon(int x, int y) {
+            Color = (Colors)System.Enum.GetValues(typeof(Colors)).Length - 1;
             _x = x;
             _y = y;
         }

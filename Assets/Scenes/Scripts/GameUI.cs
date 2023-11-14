@@ -9,13 +9,16 @@ namespace Scenes.Scripts {
         private FieldGenerator _generator;
         private FieldContainer _container;
 
-        private void Start() {
+        private void Awake() {
             _drawer = Instantiate(fieldDrawerPrefab);
             _generator = new FieldGenerator();
-            _container = new FieldContainer(50);
+            _container = new FieldContainer(15);
+        }
 
+        private void Start() {
             _generator.GenerateEasy(ref _container);
-            _drawer.Draw(_container);
+            _drawer.DrawField(_container);
+            _drawer.RenderDragons(_container);
         }
     }
 }

@@ -1,9 +1,13 @@
+using System;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Food;
+using UnityEngine;
 
 namespace Scenes.Scripts.Dragon {
-    public abstract class IDragon {
+    public abstract class IDragon{
+        [SerializeField] private SpriteRenderer _renderer;
         protected EntityState _state = EntityState.Alive;
+        public Colors Color { get; set; }
         protected int _x;
         protected int _y;
         
@@ -11,7 +15,8 @@ namespace Scenes.Scripts.Dragon {
         public abstract void PerformDecision();
         public abstract void Eat(IFood food);
 
-        public virtual (int x, int y) Cords() => (_x, _y);
         public abstract EntityState GetState();
+        public (int x, int y) Cords() => (_x, _y);
+        public void Init(Sprite sprite) => _renderer.sprite = sprite;
     }
 }
