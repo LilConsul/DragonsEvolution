@@ -1,17 +1,16 @@
 using System.Collections.Generic;
-using Scenes.Scripts.Dragon;
 using Scenes.Scripts.Enums;
-using Scenes.Scripts.Food;
+using Scenes.Scripts.Units;
 
 namespace Scenes.Scripts.Field {
     public class FieldContainer {
         private BotDragon[,] _dragons;
-        private IFood[,] _foods;
+        private Chicken[,] _foods;
         private Queue<BotDragon> _dragonsQue;
 
         public FieldContainer(uint size) {
             _dragons = new BotDragon[size, size];
-            _foods = new IFood[size, size];
+            _foods = new Chicken[size, size];
             _dragonsQue = new Queue<BotDragon>();
         }
 
@@ -22,7 +21,7 @@ namespace Scenes.Scripts.Field {
             return true;
         }
 
-        public bool Add(IFood food) {
+        public bool Add(Chicken food) {
             if (food == null)
                 return false;
             var (x, y) = food.Cords();
@@ -47,13 +46,13 @@ namespace Scenes.Scripts.Field {
             return next;
         }
 
-        public IFood[,] GetFoodField(int x, int y, int radius) {
-            var remover = new RadiusRemover<IFood>();
+        public Chicken[,] GetFoodField(int x, int y, int radius) {
+            var remover = new RadiusRemover<Chicken>();
             var newField = remover.RemoveRadius(_foods, x, y, radius);
             return newField;
         }
 
-        public IFood[,] GetFoodField() {
+        public Chicken[,] GetFoodField() {
             return _foods;
         }
 

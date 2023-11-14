@@ -1,16 +1,15 @@
 using System;
 using Scenes.Scripts.Enums;
-using Scenes.Scripts.Food;
 using UnityEngine;
 
-namespace Scenes.Scripts.Dragon {
+namespace Scenes.Scripts.Units {
     public class BotDragon : MonoBehaviour{
         [SerializeField] private SpriteRenderer _renderer;
         private EntityState _state = EntityState.Alive;
         private int _x;
         private int _y;
         public Colors Color { get; set; }
-        public void SetPosition(int x, int y) {
+        public void Initialization(int x, int y) {
             Color = GetRandomColor();
             _x = x;
             _y = y;
@@ -23,7 +22,7 @@ namespace Scenes.Scripts.Dragon {
             throw new System.NotImplementedException();
         }
 
-        public void Eat(IFood food) {
+        public void Eat(Chicken food) {
             if (food == null) 
                 return;
             //TODO: Eat food;

@@ -1,6 +1,6 @@
 using System;
-using Scenes.Scripts.Dragon;
-using Scenes.Scripts.Food;
+using Scenes.Scripts.Units;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = System.Random;
 
@@ -13,16 +13,18 @@ namespace Scenes.Scripts.Field {
         }
 
         public void GenerateEasy(ref FieldContainer container) {
-            CustomGenerator(ref container, 5, 15);
+            CustomGenerator(ref container, 50, 15);
         }
 
         private void CustomGenerator(ref FieldContainer container, int numDragons, int numFood) {
             var size = container.Size();
+            
+            // Generate Dragons
             for (var i = 0; i < numDragons; i++) {
                 var x = RandomCoordinate(size);
                 var y = RandomCoordinate(size);
                 var dragon = gameObject.AddComponent<BotDragon>();
-                dragon.SetPosition(x, y);
+                dragon.Initialization(x, y);
                 if (!container.Add(dragon))
                     i--;
             }
@@ -32,7 +34,9 @@ namespace Scenes.Scripts.Field {
                 var x = RandomCoordinate(size);
                 var y = RandomCoordinate(size);
                 var calories = RandomCalories();
-                if (!container.Add(new Chicken(x, y, calories)))
+                var chicken = gameObject.AddComponent<Chicken>();
+                chicken.Initialization(x, y, calories);
+                if (!container.Add(chicken))
                     i--;
             }
         }

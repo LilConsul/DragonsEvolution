@@ -1,5 +1,5 @@
-using Scenes.Scripts.Dragon;
 using Scenes.Scripts.Enums;
+using Scenes.Scripts.Units;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,6 +9,7 @@ namespace Scenes.Scripts.Field {
         private Tile[,] _spawnedTiles;
         [SerializeField] private Tile tilePrefab;
         [SerializeField] private Object dragonPrefab;
+        [SerializeField] private Object foodPrefab;
         [SerializeField] private DragonColors dragonsSprite;
 
         public void DrawField(FieldContainer fieldContainer = null) {
@@ -46,7 +47,7 @@ namespace Scenes.Scripts.Field {
                         if (botDragon != null) {
                             var dragonSprite = dragonsSprite.Get(dragons[i, j].Color);
                             botDragon.Init(dragonSprite);
-                            dragonObject.transform.parent = currentTile.transform; // Parenting dragon to the tile
+                            dragonObject.transform.parent = currentTile.transform;
                             dragonObject.name = $"Dragon {i} {j}";
                         }
                         else {
