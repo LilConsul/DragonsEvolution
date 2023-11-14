@@ -4,9 +4,12 @@ using Random = System.Random;
 
 namespace Scenes.Scripts.Field {
     public class FieldGenerator : MonoBehaviour {
+        public static FieldGenerator Instance;
+        
         private Random _random;
 
         private void Awake() {
+            Instance = this;
             _random = new Random();
         }
 

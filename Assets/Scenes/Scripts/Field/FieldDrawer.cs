@@ -1,16 +1,23 @@
+using System;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Units;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace Scenes.Scripts.Field {
     public class FieldDrawer : MonoBehaviour {
+        public static FieldDrawer Instance;
+        
         private int _width = 16, _height = 9;
         private Tile[,] _spawnedTiles;
         [SerializeField] private Tile tilePrefab;
         [SerializeField] private Object dragonPrefab;
         [SerializeField] private Object foodPrefab;
         [SerializeField] private DragonColors dragonsSprite;
+
+        private void Awake() {
+            Instance = this;
+        }
 
         public void DrawField() {
             var fieldContainer = FieldContainer.Instance;
@@ -33,15 +40,7 @@ namespace Scenes.Scripts.Field {
             }
         }
 
-        public void RenderDragons() {
-            RenderUnits<BotDragon>();
-        }
-        
-        public void RenderFood() {
-            RenderUnits<Chicken>();
-        }
-
-        private void RenderUnits<T>() where T : Component {
+        public void RenderUnits<T>() where T : Component {
             var fieldContainer = FieldContainer.Instance;
             var units = fieldContainer.GetUnitsField<T>();
             var size = fieldContainer.Size();
@@ -53,7 +52,8 @@ namespace Scenes.Scripts.Field {
                     var currentTile = _spawnedTiles[i, j];
                     currentTile.IsOccupied = true;
 
-                    var unitObject = Instantiate(typeof(T) == typeof(BotDragon) ? dragonPrefab : foodPrefab, new Vector3(i, j, 1f), Quaternion.identity) as GameObject;
+                    var unitObject = Instantiate(typeof(T) == typeof(BotDragon) ? dragonPrefab : foodPrefab,
+                        position: new Vector3(i, j, 1f), Quaternion.identity) as GameObject;
                     var unitComponent = unitObject!.GetComponent<T>();
 
                     if (unitComponent != null) {
