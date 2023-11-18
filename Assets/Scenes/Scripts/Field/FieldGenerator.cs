@@ -13,11 +13,7 @@ namespace Scenes.Scripts.Field {
             _random = new Random();
         }
 
-        public void GenerateEasy() {
-            CustomGenerator( 1, 5);
-        }
-
-        private void CustomGenerator(int numDragons, int numFood) {
+        public void CustomGenerator(int numDragons, int numFood) {
             var container = FieldContainer.Instance;
             var size = container.Size();
             

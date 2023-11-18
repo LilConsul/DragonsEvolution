@@ -28,7 +28,7 @@ namespace Scenes.Scripts.Units {
             _y = y;
         }
         
-        public void Move(int newX, int newY) {
+        public void Move(int delX, int delY) {
             if (_health < 0){
                 _state = EntityState.Dead;
                 return;
@@ -39,8 +39,8 @@ namespace Scenes.Scripts.Units {
             _prevX = _x;
             _prevY = _y;
             
-            _x = newX;
-            _y = newY;
+            _x = +delX;
+            _y = +delY;
             
             _health -= 1;
         }

@@ -28,11 +28,11 @@ namespace Scenes.Scripts.Field {
             _gameStarted = true;
         }
 
-        public bool Add(BotDragon dragon, bool UpdateField = true) {
+        public bool Add(BotDragon dragon, bool updateField = true) {
             if (dragon == null || !InitializeOnField(dragon))
                 return false;
             _dragonsQue.Enqueue(dragon);
-            if (_gameStarted && UpdateField) FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
+            if (_gameStarted && updateField) FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
             return true;
         }
 
