@@ -14,7 +14,7 @@ namespace Scenes.Scripts.Field {
         }
 
         public void GenerateEasy() {
-            CustomGenerator( 5, 0);
+            CustomGenerator( 5, 25);
         }
 
         private void CustomGenerator(int numDragons, int numFood) {
@@ -30,25 +30,12 @@ namespace Scenes.Scripts.Field {
                 if (!container.Add(dragon))
                     i--;
             }
-
             // Generate Food
-            for (var i = 0; i < numFood; i++) {
-                var x = RandomCoordinate(size);
-                var y = RandomCoordinate(size);
-                var calories = RandomCalories();
-                var chicken = gameObject.AddComponent<Chicken>();
-                chicken.Initialization(x, y, calories);
-                if (!container.Add(chicken))
-                    i--;
-            }
+            FoodFactory.Instance.SpawnFood(numFood);
         }
 
         private int RandomCoordinate(int size) {
             return _random.Next(size);
-        }
-
-        private int RandomCalories() {
-            return _random.Next(100, 500);
         }
     }
 }

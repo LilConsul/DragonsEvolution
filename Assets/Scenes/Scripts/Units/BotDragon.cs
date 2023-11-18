@@ -1,6 +1,7 @@
 using System;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Field;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 namespace Scenes.Scripts.Units {
@@ -8,11 +9,12 @@ namespace Scenes.Scripts.Units {
         [SerializeField] private SpriteRenderer _renderer;
         private int _prevX;
         private int _prevY;
+        private Chicken _prevEaten;
         private int _x;
         private int _y;
 
         private int _health;
-        
+        private int _speed;
         private EntityState _state = EntityState.Alive;
         
         
@@ -24,6 +26,7 @@ namespace Scenes.Scripts.Units {
         }
         
         public bool Move(int newX, int newY) {
+            _prevEaten = null;
             _prevX = _x;
             _prevY = _y;
             _x = newX;
@@ -34,12 +37,9 @@ namespace Scenes.Scripts.Units {
         public void Eat(Chicken food) {
             if (food == null) 
                 return;
-            //TODO: Eat food;
-            throw new NotImplementedException();
-        }
-
-        public void PerformDecision() {
-            throw new NotImplementedException();
+            FoodFactory.Instance.SpawnFood();
+            _prevEaten = food;
+            _health += food.EatMe();
         }
 
         public EntityState GetState() {
@@ -53,5 +53,6 @@ namespace Scenes.Scripts.Units {
         public (int x, int y) Cords() => (_x, _y);
         public (int x, int y) PrevCords() => (_prevX, _prevY);
         public void Init(Sprite sprite) => _renderer.sprite = sprite;
+        public Chicken PrevEaten() => _prevEaten;
     }
 }

@@ -78,7 +78,6 @@ namespace Scenes.Scripts.Field {
 
         public void UpdateUnits<T>(T unit) where T : Component {
             var fieldContainer = FieldContainer.Instance;
-            /*if (fieldContainer.OnlyMove) {*/
             if (unit is BotDragon botDragon) {
                 var prevCords = botDragon.PrevCords();
                 var newCords = botDragon.Cords();
@@ -86,7 +85,9 @@ namespace Scenes.Scripts.Field {
                 if (prevCords != newCords) {
                     var prevTile = _spawnedTiles[prevCords.x, prevCords.y];
                     var newTile = _spawnedTiles[newCords.x, newCords.y];
-                    
+
+                    if(botDragon.PrevEaten() != null)
+                        DestroyChild(newTile);
                     DestroyChild(prevTile);
                     InstantiateBotDragonOnTile(botDragon, newTile);
                 }

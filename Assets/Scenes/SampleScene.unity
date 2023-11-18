@@ -252,6 +252,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c69cb4c805a4f358bb2e6e53fba22ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1147173342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1147173343}
+  - component: {fileID: 1147173344}
+  m_Layer: 0
+  m_Name: FoodFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1147173343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147173342}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.464628, y: -0.034355164, z: -1.7354498}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1147173344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147173342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96cf3b5a89504a17a9633272a4adebf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minCalories: 15
+  maxCalories: 25
 --- !u!212 &1720105170 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 5399161579717578355, guid: 0a211b9b4944c434b9ca38ac4e787f03, type: 3}
@@ -814,3 +860,4 @@ SceneRoots:
   - {fileID: 3374371679531999128}
   - {fileID: 2741469767859835935}
   - {fileID: 6201391925711086763}
+  - {fileID: 1147173343}

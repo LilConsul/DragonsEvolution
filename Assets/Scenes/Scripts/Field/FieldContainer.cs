@@ -110,14 +110,14 @@ namespace Scenes.Scripts.Field {
             if (!ValidCords(x, y))
                 return false;
 
+            _dragons[x, y] = dragon;
             OnlyMove = true;
-            if (_foods != null) {
+            if (_foods[x, y] != null) {
                 OnlyMove = false;
                 dragon.Eat(_foods[x, y]);
                 _foods[x, y] = null;
             }
 
-            _dragons[x, y] = dragon;
             return true;
         }
 
