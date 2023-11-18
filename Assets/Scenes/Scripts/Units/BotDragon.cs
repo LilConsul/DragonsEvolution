@@ -61,7 +61,7 @@ namespace Scenes.Scripts.Units {
         public void Eat(Chicken food) {
             if (food == null)
                 return;
-            FoodFactory.Instance.SpawnFood();
+            FoodFactory.Instance.SpawnFood(1);
             _prevEaten = food;
             _health += food.GetCalories();
         }

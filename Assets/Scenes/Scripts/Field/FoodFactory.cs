@@ -6,9 +6,12 @@ using Random = System.Random;
 namespace Scenes.Scripts.Field {
     [Serializable]
     public class FoodFactory : MonoBehaviour{
-        private Random _random;
         public static FoodFactory Instance;
 
+        public Action FoodAdded;
+        
+        private Random _random;
+        private bool _gameStarted;
         [SerializeField] private int minCalories;
         [SerializeField] private int maxCalories;
         private void Awake() {
@@ -25,10 +28,13 @@ namespace Scenes.Scripts.Field {
                 var calories = RandomCalories();
                 var chicken = gameObject.AddComponent<Chicken>();
                 chicken.Initialization(x, y, calories);
-                if (!container.Add(chicken))
-                    i--;
+                if (!container.Add(chicken)) i--;
+                //else if(_gameStarted) FoodAdded!.Invoke();
             }
+            
         }
+
+        public void StartGame() => _gameStarted = true;
         
         private int RandomCoordinate(int size) {
             return _random.Next(size);

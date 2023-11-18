@@ -26,6 +26,7 @@ namespace Scenes.Scripts.Field {
 
         public void StartGame() {
             _gameStarted = true;
+            FoodFactory.Instance.StartGame();
         }
 
         public bool Add(BotDragon dragon, bool updateField = true) {

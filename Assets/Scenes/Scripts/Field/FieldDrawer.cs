@@ -22,6 +22,7 @@ namespace Scenes.Scripts.Field {
 
         public void DrawField() {
             var fieldContainer = FieldContainer.Instance;
+            //FoodFactory.Instance.FoodAdded += UpdateUnits();
             if (fieldContainer != null) {
                 _width = fieldContainer.Size();
                 _height = fieldContainer.Size();
@@ -39,6 +40,10 @@ namespace Scenes.Scripts.Field {
                     spawnedTile.name = $"Tile {i} {j}";
                 }
             }
+        }
+
+        private void UpdateAllFood() {
+            Debug.LogWarning("UpdateAllFOOD!!!!");
         }
 
         public void RenderUnits<T>() where T : Component {
@@ -87,6 +92,10 @@ namespace Scenes.Scripts.Field {
                 DestroyChild(prevTile);
                 InstantiateBotDragonOnTile(botDragon, newTile);
             }
+
+            if (unit is Chicken chicken) {
+                
+            }
             //}
             else { }
         }
@@ -106,8 +115,8 @@ namespace Scenes.Scripts.Field {
 
         private void DrawBlood(Tile tile) {
             var position = tile.transform.position;
-            var bloodObject = Instantiate(bloodPrefab, 
-                position: new Vector3(position.x, position.y, -2f), 
+            var bloodObject = Instantiate(bloodPrefab,
+                position: new Vector3(position.x, position.y, -2f),
                 Quaternion.identity);
         }
 
@@ -141,6 +150,5 @@ namespace Scenes.Scripts.Field {
                 tile.IsOccupied = true;
             }
         }
-        
     }
 }

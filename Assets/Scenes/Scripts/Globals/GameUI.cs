@@ -7,10 +7,10 @@ namespace Scenes.Scripts.Globals {
         private AI _ai;
 
         private void Start() {
-            FieldContainer.Instance.SetSize(10);
+            FieldContainer.Instance.SetSize(200);
             
             //FieldGenerator.Instance.GeneratePreset();
-            FieldGenerator.Instance.CustomGenerator(5, 15);
+            FieldGenerator.Instance.CustomGenerator(100, 2000);
             
             FieldDrawer.Instance.DrawField();
             FieldDrawer.Instance.RenderUnits<BotDragon>();
@@ -18,7 +18,7 @@ namespace Scenes.Scripts.Globals {
             
             FieldContainer.Instance.StartGame();
             _ai = gameObject.AddComponent<AI>();
-            InvokeRepeating("BotUpdate", 1.0f, 1.0f);
+            InvokeRepeating("BotUpdate", 1.0f, 0.5f);
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
