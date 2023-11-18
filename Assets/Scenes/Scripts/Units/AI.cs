@@ -3,10 +3,12 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Random = System.Random;
 
 namespace Scenes.Scripts.Units {
     public class AI : MonoBehaviour {
         private int[,] weights;
+        private bool _sameResults;
         private BotDragon _dragon;
         private BotDragon[,] _dragons;
         private Chicken[,] _chickens;
@@ -36,11 +38,29 @@ namespace Scenes.Scripts.Units {
         public (int x, int y) GetNextMove(BotDragon dragon) {
             SetInitialization(dragon);
             var sortedMoves = SortedMoves();
-            foreach (var (x, y) in sortedMoves) {
-                if (FieldContainer.Instance.ValidCords(_dragon.Cords().x + x, _dragon.Cords().y + y))
-                    return (x, y);
+            if (_sameResults) {
+                sortedMoves = RandomMove(sortedMoves);
             }
+
+            foreach (var (x, y) in sortedMoves) {
+                if (FieldContainer.Instance.ValidCords(_dragon.Cords().x + x, _dragon.Cords().y + y)) {
+                    Debug.LogWarning($"The best move is {x} {y}");
+                    return (x, y);
+                }
+
+                Debug.LogWarning($"Dragon is locked!");
+            }
+
             return (0, 0);
+        }
+
+        private List<(int x, int y)> RandomMove(List<(int x, int y)> sortedMoves) {
+            var rand = new Random();
+            for (var i = sortedMoves.Count - 1; i > 0; i--) {
+                var j = rand.Next(0, i + 1);
+                (sortedMoves[i], sortedMoves[j]) = (sortedMoves[j], sortedMoves[i]);
+            }
+            return sortedMoves;
         }
 
         private void SetWeight() {
@@ -93,11 +113,14 @@ namespace Scenes.Scripts.Units {
                 }
             }
 
+
+            _sameResults = sumDown == sumUp && sumUp == sumLeft && sumLeft == sumRight;
+            //Check if all results are the same;
             var moves = new List<KeyValuePair<(int x, int y), int>> {
-                new((0, 1), sumUp), // Move up
-                new((0, -1), sumDown), // Move down
-                new((-1, 0), sumLeft), // Move left
-                new((1, 0), sumRight) // Move right
+                new((-1, 0), sumUp), // Move up
+                new((1, 0), sumDown), // Move down
+                new((0, -1), sumLeft), // Move left
+                new((0, 1), sumRight) // Move right
             };
             return moves;
         }

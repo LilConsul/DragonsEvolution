@@ -51,36 +51,17 @@ namespace Scenes.Scripts.Field {
                     if (units[i, j] == null) continue;
 
                     var currentTile = _spawnedTiles[i, j];
-                    currentTile.IsOccupied = true;
 
-                    var newPosition = MakeVector(i, j);
-                    var unitObject = Instantiate(typeof(T) == typeof(BotDragon) ? dragonPrefab : foodPrefab,
-                        position: newPosition,
-                        Quaternion.identity) as GameObject;
-                    var unitComponent = unitObject!.GetComponent<T>();
-
-                    if (unitComponent != null) {
-                        if (typeof(T) == typeof(BotDragon)) {
-                            var dragon = unitComponent as BotDragon;
-                            if (dragon!.TimeToLive < 0)
-                                break;
-                            else if (dragon!.State == EntityState.Dead) {
-                                
-                            }
-                            var dragonSprite = dragonsSprite.Get((units[i, j] as BotDragon)!.Color);
-                            dragon!.Init(dragonSprite);
-                            dragon!.OnTimeToLiveEnd += BotDragonOnOnTimeToLiveEnd;
-                        }
-
-                        if (typeof(T) == typeof(Chicken)) {
-                            // Initialize Chicken 
-                        }
-
-                        unitObject.transform.parent = currentTile.transform;
-                        unitObject.name = $"{typeof(T).Name} {newPosition.x} {newPosition.y}";
-                    }
-                    else {
-                        Debug.LogWarning($"The prefab doesn't have a {typeof(T).Name} component.");
+                    switch (units[i, j]) {
+                        case BotDragon:
+                            InstantiateBotDragonOnTile(units[i, j] as BotDragon, currentTile);
+                            break;
+                        case Chicken:
+                            InstantiateFoodOnTile(units[i, j] as Chicken, currentTile);
+                            break;
+                        default:
+                            Debug.LogWarning($"The prefab doesn't have a {typeof(T).Name} component.");
+                            break;
                     }
                 }
             }
@@ -111,7 +92,6 @@ namespace Scenes.Scripts.Field {
         }
 
         private void BotDragonOnOnTimeToLiveEnd() {
-            
             RenderUnits<BotDragon>();
         }
 
@@ -147,5 +127,20 @@ namespace Scenes.Scripts.Field {
                 tile.IsOccupied = true;
             }
         }
+
+        private void InstantiateFoodOnTile(Chicken food, Tile tile) {
+            var newCords = MakeVector(food.Cords().x, food.Cords().y);
+            var unitObject = Instantiate(foodPrefab,
+                position: newCords,
+                Quaternion.identity) as GameObject;
+
+            var unitComponent = unitObject!.GetComponent<Chicken>();
+            if (unitComponent != null) {
+                unitObject.transform.parent = tile.transform;
+                unitObject.name = $"{typeof(Chicken).Name} {newCords.x} {newCords.y}";
+                tile.IsOccupied = true;
+            }
+        }
+        
     }
 }
