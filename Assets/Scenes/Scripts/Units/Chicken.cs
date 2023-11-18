@@ -18,8 +18,8 @@ namespace Scenes.Scripts.Units {
         }
 
         public (int x, int y) Cords() => (_x, _y);
-
-        public int EatMe() {
+        
+        public int GetCalories() {
             return _calories;
         }
     }

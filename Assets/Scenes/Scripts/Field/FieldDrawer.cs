@@ -97,7 +97,7 @@ namespace Scenes.Scripts.Field {
         }
 
         private void DestroyChild(Tile tile) {
-            var child = tile.transform.GetChild(0).gameObject;
+            var child = tile!.transform.GetChild(0).gameObject;
             if (child != null) {
                 Destroy(child);
                 tile.IsOccupied = false;

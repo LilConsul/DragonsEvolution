@@ -1,20 +1,20 @@
 using System;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Field;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 namespace Scenes.Scripts.Units {
     public class BotDragon : MonoBehaviour{
         [SerializeField] private SpriteRenderer _renderer;
+        private Chicken _prevEaten;
         private int _prevX;
         private int _prevY;
-        private Chicken _prevEaten;
         private int _x;
         private int _y;
 
-        private int _health;
-        private int _speed;
+        private double _health;
+        private double _speed;
+        private double _intelligence;
         private EntityState _state = EntityState.Alive;
         
         
@@ -25,13 +25,21 @@ namespace Scenes.Scripts.Units {
             _y = y;
         }
         
-        public bool Move(int newX, int newY) {
+        public void Move(int newX, int newY) {
+            if (_health < 0){
+                _state = EntityState.Dead;
+                return;
+            }
+            
             _prevEaten = null;
+            
             _prevX = _x;
             _prevY = _y;
+            
             _x = newX;
             _y = newY;
-            return true;
+            
+            _health -= 1;
         }
         
         public void Eat(Chicken food) {
@@ -39,7 +47,7 @@ namespace Scenes.Scripts.Units {
                 return;
             FoodFactory.Instance.SpawnFood();
             _prevEaten = food;
-            _health += food.EatMe();
+            _health += food.GetCalories();
         }
 
         public EntityState GetState() {
@@ -54,5 +62,6 @@ namespace Scenes.Scripts.Units {
         public (int x, int y) PrevCords() => (_prevX, _prevY);
         public void Init(Sprite sprite) => _renderer.sprite = sprite;
         public Chicken PrevEaten() => _prevEaten;
+        public int GetIntelligence() => (int)_intelligence;
     }
 }
