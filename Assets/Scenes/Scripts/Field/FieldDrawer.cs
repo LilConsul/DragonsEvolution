@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 namespace Scenes.Scripts.Field {
     public class FieldDrawer : MonoBehaviour {
         public static FieldDrawer Instance;
-        
+
         private int _width = 16, _height = 9;
         private Tile[,] _spawnedTiles;
         [SerializeField] private Tile tilePrefab;
@@ -44,7 +44,7 @@ namespace Scenes.Scripts.Field {
             var fieldContainer = FieldContainer.Instance;
             var units = fieldContainer.GetUnitsField<T>();
             var size = fieldContainer.Size();
-            
+
             for (var i = 0; i < size; i++) {
                 for (var j = 0; j < size; j++) {
                     if (units[i, j] == null) continue;
@@ -73,6 +73,50 @@ namespace Scenes.Scripts.Field {
                         Debug.LogWarning($"The prefab doesn't have a {typeof(T).Name} component.");
                     }
                 }
+            }
+        }
+
+        public void UpdateUnits<T>(T unit) where T : Component {
+            var fieldContainer = FieldContainer.Instance;
+            /*if (fieldContainer.OnlyMove) {*/
+            if (unit is BotDragon botDragon) {
+                var prevCords = botDragon.PrevCords();
+                var newCords = botDragon.Cords();
+
+                if (prevCords != newCords) {
+                    var prevTile = _spawnedTiles[prevCords.x, prevCords.y];
+                    var newTile = _spawnedTiles[newCords.x, newCords.y];
+                    
+                    DestroyChild(prevTile);
+                    InstantiateBotDragonOnTile(botDragon, newTile);
+                }
+            }
+            //}
+            else { }
+        }
+
+        private void DestroyChild(Tile tile) {
+            var child = tile.transform.GetChild(0).gameObject;
+            if (child != null) {
+                Destroy(child);
+                tile.IsOccupied = false;
+            }
+        }
+
+        private void InstantiateBotDragonOnTile(BotDragon botDragon, Tile tile) {
+            var newCords = new Vector3(botDragon.Cords().x, botDragon.Cords().y, 1f);
+            var unitObject = Instantiate(dragonPrefab,
+                new Vector3(newCords.x, newCords.y, 1f),
+                Quaternion.identity) as GameObject;
+
+            var unitComponent = unitObject?.GetComponent<BotDragon>();
+            if (unitComponent != null) {
+                var dragonSprite = dragonsSprite.Get(botDragon.Color);
+                unitComponent.Init(dragonSprite);
+
+                unitObject.transform.parent = tile.transform;
+                unitObject.name = $"{typeof(BotDragon).Name} {newCords.x} {newCords.y}";
+                tile.IsOccupied = true;
             }
         }
     }
