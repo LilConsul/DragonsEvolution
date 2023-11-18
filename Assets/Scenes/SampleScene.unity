@@ -632,6 +632,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 178486526}
     - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+      propertyPath: dragonsSprite.red
+      value: 
+      objectReference: {fileID: 21300000, guid: 652397390386cb64caba44ec19b7f14e, type: 3}
+    - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
       propertyPath: dragonsPrefab.blue
       value: 
       objectReference: {fileID: 21300000, guid: 0ffa726515a56524fab8e785c2cd201c, type: 3}
@@ -643,6 +647,10 @@ PrefabInstance:
       propertyPath: dragonsSprite.blue
       value: 
       objectReference: {fileID: 21300000, guid: 0ffa726515a56524fab8e785c2cd201c, type: 3}
+    - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+      propertyPath: dragonsSprite.dead
+      value: 
+      objectReference: {fileID: 21300000, guid: f48e0c6a4c7641646b67160cebb3af99, type: 3}
     - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
       propertyPath: dragonsSprite.pink
       value: 

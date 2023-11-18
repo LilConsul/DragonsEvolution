@@ -5,6 +5,7 @@ namespace Scenes.Scripts.Enums {
         Purple,
         Green,
         Blue, 
-        Player
+        Red,
+        Dead
     }
 }

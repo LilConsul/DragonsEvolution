@@ -13,6 +13,7 @@ namespace Scenes.Scripts.Field {
         [SerializeField] private Tile tilePrefab;
         [SerializeField] private Object dragonPrefab;
         [SerializeField] private Object foodPrefab;
+        [SerializeField] private Object bloodPrefab;
         [SerializeField] private DragonColors dragonsSprite;
 
         private void Awake() {
@@ -60,8 +61,15 @@ namespace Scenes.Scripts.Field {
 
                     if (unitComponent != null) {
                         if (typeof(T) == typeof(BotDragon)) {
+                            var dragon = unitComponent as BotDragon;
+                            if (dragon!.TimeToLive < 0)
+                                break;
+                            else if (dragon!.State == EntityState.Dead) {
+                                
+                            }
                             var dragonSprite = dragonsSprite.Get((units[i, j] as BotDragon)!.Color);
-                            (unitComponent as BotDragon)?.Init(dragonSprite);
+                            dragon!.Init(dragonSprite);
+                            dragon!.OnTimeToLiveEnd += BotDragonOnOnTimeToLiveEnd;
                         }
 
                         if (typeof(T) == typeof(Chicken)) {
@@ -79,35 +87,48 @@ namespace Scenes.Scripts.Field {
         }
 
         private Vector3 MakeVector(int i, int j) {
-            var size = FieldContainer.Instance.Size();
-            return new Vector3(j, size - i - 1, -1f);
+            /*var size = FieldContainer.Instance.Size();
+            return new Vector3(j, size - i - 1, -1f);*/
+            return new Vector3(i, j, -1f);
         }
-        
+
         public void UpdateUnits<T>(T unit) where T : Component {
             if (unit is BotDragon botDragon) {
                 var prevCords = botDragon.PrevCords();
                 var newCords = botDragon.Cords();
+                botDragon.OnTimeToLiveEnd += BotDragonOnOnTimeToLiveEnd;
 
-                if (prevCords != newCords) {
-                    var prevTile = _spawnedTiles[prevCords.x, prevCords.y];
-                    var newTile = _spawnedTiles[newCords.x, newCords.y];
+                var prevTile = _spawnedTiles[prevCords.x, prevCords.y];
+                var newTile = _spawnedTiles[newCords.x, newCords.y];
 
-                    if(botDragon.PrevEaten() != null)
-                        DestroyChild(newTile);
-                    DestroyChild(prevTile);
-                    InstantiateBotDragonOnTile(botDragon, newTile);
-                }
+                if (botDragon.PrevEaten() != null)
+                    DestroyChild(newTile);
+                DestroyChild(prevTile);
+                InstantiateBotDragonOnTile(botDragon, newTile);
             }
             //}
             else { }
         }
 
+        private void BotDragonOnOnTimeToLiveEnd() {
+            
+            RenderUnits<BotDragon>();
+        }
+
         private void DestroyChild(Tile tile) {
-            var child = tile!.transform.GetChild(0).gameObject;
+            if (tile == null || tile.transform.childCount <= 0) return;
+            var child = tile.transform.GetChild(0).gameObject;
             if (child != null) {
                 Destroy(child);
                 tile.IsOccupied = false;
             }
+        }
+
+        private void DrawBlood(Tile tile) {
+            var position = tile.transform.position;
+            var bloodObject = Instantiate(bloodPrefab, 
+                position: new Vector3(position.x, position.y, -2f), 
+                Quaternion.identity);
         }
 
         private void InstantiateBotDragonOnTile(BotDragon botDragon, Tile tile) {

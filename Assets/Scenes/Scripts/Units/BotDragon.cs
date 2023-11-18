@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Scenes.Scripts.Units {
     public class BotDragon : MonoBehaviour{
         [SerializeField] private SpriteRenderer _renderer;
+        public int TimeToLive { get; set; }
         private Chicken _prevEaten;
         private int _prevX;
         private int _prevY;
@@ -15,12 +16,15 @@ namespace Scenes.Scripts.Units {
         private double _health;
         private double _speed;
         private double _intelligence;
-        private EntityState _state = EntityState.Alive;
+        public EntityState State { get; set; }
         
+        public event Action OnTimeToLiveEnd;
         
         public Colors Color { get; set; }
         public void Initialization(int x, int y) {
+            TimeToLive = 5;
             Color = GetRandomColor();
+            State = EntityState.Alive;
             _intelligence = 3;
             _prevX = x;
             _prevY = y;
@@ -29,8 +33,14 @@ namespace Scenes.Scripts.Units {
         }
         
         public void Move(int delX, int delY) {
+            if (State == EntityState.Dead) {
+                TimeToLive -= 1;
+                if(TimeToLive < 0)
+                    OnTimeToLiveEnd?.Invoke();
+            }
             if (_health < 0){
-                _state = EntityState.Dead;
+                State = EntityState.Dead;
+                Color = Colors.Dead;
                 return;
             }
             
@@ -54,7 +64,7 @@ namespace Scenes.Scripts.Units {
         }
 
         public EntityState GetState() {
-            return _state;
+            return State;
         }
         
         private Colors GetRandomColor() {

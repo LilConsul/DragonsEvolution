@@ -94,10 +94,10 @@ namespace Scenes.Scripts.Units {
             }
 
             var moves = new List<KeyValuePair<(int x, int y), int>> {
-                new KeyValuePair<(int x, int y), int>((0, 1), sumUp), // Move up
-                new KeyValuePair<(int x, int y), int>((0, -1), sumDown), // Move down
-                new KeyValuePair<(int x, int y), int>((-1, 0), sumLeft), // Move left
-                new KeyValuePair<(int x, int y), int>((1, 0), sumRight) // Move right
+                new((0, 1), sumUp), // Move up
+                new((0, -1), sumDown), // Move down
+                new((-1, 0), sumLeft), // Move left
+                new((1, 0), sumRight) // Move right
             };
             return moves;
         }
