@@ -52,8 +52,10 @@ namespace Scenes.Scripts.Field {
                     var currentTile = _spawnedTiles[i, j];
                     currentTile.IsOccupied = true;
 
+                    var newPosition = MakeVector(i, j);
                     var unitObject = Instantiate(typeof(T) == typeof(BotDragon) ? dragonPrefab : foodPrefab,
-                        position: new Vector3(i, j, 1f), Quaternion.identity) as GameObject;
+                        position: newPosition,
+                        Quaternion.identity) as GameObject;
                     var unitComponent = unitObject!.GetComponent<T>();
 
                     if (unitComponent != null) {
@@ -67,7 +69,7 @@ namespace Scenes.Scripts.Field {
                         }
 
                         unitObject.transform.parent = currentTile.transform;
-                        unitObject.name = $"{typeof(T).Name} {i} {j}";
+                        unitObject.name = $"{typeof(T).Name} {newPosition.x} {newPosition.y}";
                     }
                     else {
                         Debug.LogWarning($"The prefab doesn't have a {typeof(T).Name} component.");
@@ -76,8 +78,12 @@ namespace Scenes.Scripts.Field {
             }
         }
 
+        private Vector3 MakeVector(int i, int j) {
+            var size = FieldContainer.Instance.Size();
+            return new Vector3(j, size - i - 1, -1f);
+        }
+        
         public void UpdateUnits<T>(T unit) where T : Component {
-            var fieldContainer = FieldContainer.Instance;
             if (unit is BotDragon botDragon) {
                 var prevCords = botDragon.PrevCords();
                 var newCords = botDragon.Cords();
@@ -105,12 +111,12 @@ namespace Scenes.Scripts.Field {
         }
 
         private void InstantiateBotDragonOnTile(BotDragon botDragon, Tile tile) {
-            var newCords = new Vector3(botDragon.Cords().x, botDragon.Cords().y, 1f);
+            var newCords = MakeVector(botDragon.Cords().x, botDragon.Cords().y);
             var unitObject = Instantiate(dragonPrefab,
-                new Vector3(newCords.x, newCords.y, 1f),
+                position: newCords,
                 Quaternion.identity) as GameObject;
 
-            var unitComponent = unitObject?.GetComponent<BotDragon>();
+            var unitComponent = unitObject!.GetComponent<BotDragon>();
             if (unitComponent != null) {
                 var dragonSprite = dragonsSprite.Get(botDragon.Color);
                 unitComponent.Init(dragonSprite);

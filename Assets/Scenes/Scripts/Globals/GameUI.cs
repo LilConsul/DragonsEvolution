@@ -6,7 +6,7 @@ namespace Scenes.Scripts.Globals {
     public class GameUI : MonoBehaviour {
         private AI _ai;
         private void Start() {
-            FieldContainer.Instance.SetSize(15);
+            FieldContainer.Instance.SetSize(5);
             FieldGenerator.Instance.GenerateEasy();
             FieldDrawer.Instance.DrawField();
             FieldDrawer.Instance.RenderUnits<BotDragon>();
@@ -18,13 +18,15 @@ namespace Scenes.Scripts.Globals {
 
         // ReSharper disable Unity.PerformanceAnalysis
         private void BotUpdate() {
+            BotDragon[,] table = FieldContainer.Instance.GetUnitsField<BotDragon>();
             var dragon = FieldContainer.Instance.GetNextDragon();
             _ai.SetInitialization(dragon);
             _ai.SetWeight();
-            var weights = _ai.TakeWeight();
-            Print(dragon, weights);
+
+            Print(dragon, _ai.TakeWeight());
             
-            dragon.Move(dragon.Cords().x + 1, dragon.Cords().y + 1);
+            /*(int x, int y) = _ai.GetNextMove();
+            dragon.Move(x, y);*/
             if (!FieldContainer.Instance.Add(dragon)){
                 FieldContainer.Instance.ReturnMove(dragon);
             }
@@ -36,7 +38,7 @@ namespace Scenes.Scripts.Globals {
             var rows = input.GetLength(0);
             var cols = input.GetLength(1);
 
-            (var x, var y) = who.Cords();
+            (var x, var y) = who != null ? who.Cords() : (-100, -100);
             var matrixString = "Matrix:\n";
 
             for (var i = 0; i < rows; i++) {

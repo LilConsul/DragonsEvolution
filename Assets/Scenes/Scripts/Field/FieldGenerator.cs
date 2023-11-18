@@ -14,7 +14,7 @@ namespace Scenes.Scripts.Field {
         }
 
         public void GenerateEasy() {
-            CustomGenerator( 5, 25);
+            CustomGenerator( 1, 5);
         }
 
         private void CustomGenerator(int numDragons, int numFood) {

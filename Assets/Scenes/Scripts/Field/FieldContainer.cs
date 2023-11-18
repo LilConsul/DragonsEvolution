@@ -121,7 +121,7 @@ namespace Scenes.Scripts.Field {
             return true;
         }
 
-        private bool ValidCords(int x, int y) {
+        public bool ValidCords(int x, int y) {
             try {
                 if (_dragons[x, y] != null)
                     return false;

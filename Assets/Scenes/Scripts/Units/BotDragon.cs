@@ -21,6 +21,9 @@ namespace Scenes.Scripts.Units {
         public Colors Color { get; set; }
         public void Initialization(int x, int y) {
             Color = GetRandomColor();
+            _intelligence = 3;
+            _prevX = x;
+            _prevY = y;
             _x = x;
             _y = y;
         }

@@ -9,9 +9,10 @@ namespace Scenes.Scripts {
 
             var newField = (T[,])field.Clone();
 
-            for (var i = Math.Max(0, x - radius); i <= Math.Min(field.GetLength(0) - 1, x + radius); i++) {
-                for (var j = Math.Max(0, y - radius); j <= Math.Min(field.GetLength(1) - 1, y + radius); j++) {
-                    if (Math.Sqrt(Math.Pow(i - x, 2) + Math.Pow(j - y, 2)) <= radius) {
+            for (var i = 0; i < field.GetLength(0); i++) {
+                for (var j = 0; j < field.GetLength(1); j++) {
+                    double distance = Math.Sqrt(Math.Pow(i - x, 2) + Math.Pow(j - y, 2));
+                    if (distance > radius) {
                         newField[i, j] = null;
                     }
                 }
@@ -19,5 +20,6 @@ namespace Scenes.Scripts {
 
             return newField;
         }
+
     }
 }
