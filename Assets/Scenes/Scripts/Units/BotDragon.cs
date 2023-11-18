@@ -39,8 +39,8 @@ namespace Scenes.Scripts.Units {
             _prevX = _x;
             _prevY = _y;
             
-            _x = +delX;
-            _y = +delY;
+            _x += delX;
+            _y += delY;
             
             _health -= 1;
         }
