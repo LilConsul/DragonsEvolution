@@ -1,8 +1,8 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using Scenes.Scripts.Field;
 using System.Collections.Generic;
+using Scenes.Scripts.Enums;
 using Random = System.Random;
 
 namespace Scenes.Scripts.Units {
@@ -82,6 +82,10 @@ namespace Scenes.Scripts.Units {
 
                     if (_dragons[i, j] != null) {
                         var myDrag = _dragons[i, j];
+                        if (myDrag.State == EntityState.Dead) {
+                            _weights[i, j] = 0;
+                            continue;
+                        }
                         _weights[i, j] = myDrag.Color == _dragon.Color ? -1 : 5;
                         continue;
                     }

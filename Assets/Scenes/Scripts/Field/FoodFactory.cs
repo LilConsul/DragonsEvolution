@@ -22,15 +22,14 @@ namespace Scenes.Scripts.Field {
         }
         
         public void SpawnFood(int amount = 1) {
-            var container = FieldContainer.Instance;
-            var size = container.Size();
-            for (var i = 0; i < amount; i++) {
+            var size = FieldContainer.Instance.Size();
+            for (int i = 0; i < amount; i++) {
                 var x = RandomCoordinate(size);
                 var y = RandomCoordinate(size);
                 var calories = RandomCalories();
                 var chicken = gameObject.AddComponent<Chicken>();
                 chicken.Initialization(x, y, calories);
-                if (!container.Add(chicken)) i--;
+                if (!FieldContainer.Instance.Add(chicken)) i--;
                 else if(_gameStarted) OnFoodAdded?.Invoke(chicken);
             }
         }

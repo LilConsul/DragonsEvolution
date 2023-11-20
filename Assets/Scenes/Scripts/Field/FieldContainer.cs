@@ -7,7 +7,6 @@ using UnityEngine;
 namespace Scenes.Scripts.Field {
     public class FieldContainer : MonoBehaviour {
         public static FieldContainer Instance;
-        public bool OnlyMove { get; set; }
         private BotDragon[,] _dragons;
         private Chicken[,] _foods;
         private Queue<BotDragon> _dragonsQue;
@@ -36,6 +35,7 @@ namespace Scenes.Scripts.Field {
             if (_gameStarted && updateField && dragon.State != EntityState.Dead) {
                 FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
             }
+
             return true;
         }
 
@@ -52,13 +52,10 @@ namespace Scenes.Scripts.Field {
             if (!ValidFoodCords(x, y) || !ValidCords(x, y))
                 return false;
 
-            if (_foods[x, y] != null)
-                food.Add(_foods[x, y]);
-
             _foods[x, y] = food;
             return true;
         }
-        
+
         public void DeleteFood(int x, int y) {
             _foods[x, y] = null;
         }
@@ -111,10 +108,9 @@ namespace Scenes.Scripts.Field {
                 return false;
 
             _dragons[x, y] = dragon;
-            OnlyMove = true;
             if (_foods[x, y] != null) {
-                OnlyMove = false;
                 dragon.Eat(_foods[x, y]);
+                FoodFactory.Instance.SpawnFood();
                 _foods[x, y] = null;
             }
 
@@ -132,9 +128,11 @@ namespace Scenes.Scripts.Field {
 
             return true;
         }
-        
+
         private bool ValidFoodCords(int x, int y) {
-            return x >= 0 && x < _foods.GetLength(0) && y >= 0 && y < _foods.GetLength(1);
+            try { if (_foods[x, y] != null) return false; }
+            catch (IndexOutOfRangeException) { return false; }
+            return true;
         }
     }
 }

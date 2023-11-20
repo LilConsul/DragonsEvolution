@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Scenes.Scripts.Globals {
     public class GameUI : MonoBehaviour {
-        [SerializeField] private float botUpdateDelay = 1.0f;
+        [SerializeField] private float botUpdateDelay;
         private AI _ai;
 
         private void Start() {
-            FieldContainer.Instance.SetSize(10);
+            FieldContainer.Instance.SetSize(15);
 
             //FieldGenerator.Instance.GeneratePreset();
             FieldGenerator.Instance.CustomGenerator(5, 15);

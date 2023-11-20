@@ -13,10 +13,6 @@ namespace Scenes.Scripts.Units {
             _calories = calories;
         }
 
-        public Chicken Add(Chicken otherFood) {
-            return gameObject.AddComponent<Chicken>();
-        }
-
         public (int x, int y) Cords() => (_x, _y);
         
         public int GetCalories() {

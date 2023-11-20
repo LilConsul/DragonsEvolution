@@ -44,10 +44,6 @@ namespace Scenes.Scripts.Field {
             }
         }
 
-        private void UpdateAllFood() {
-            Debug.LogWarning("UpdateAllFOOD!!!!");
-        }
-
         public void RenderUnits<T>() where T : Component {
             var fieldContainer = FieldContainer.Instance;
             var units = fieldContainer.GetUnitsField<T>();

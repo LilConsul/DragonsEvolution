@@ -337,6 +337,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7458463890690710255, guid: d40ae30a3598a7a438dd81448f3183e5, type: 3}
+      propertyPath: botUpdateDelay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7458463890690710255, guid: d40ae30a3598a7a438dd81448f3183e5, type: 3}
       propertyPath: fieldDrawerPrefab
       value: 
       objectReference: {fileID: 2080411268}
