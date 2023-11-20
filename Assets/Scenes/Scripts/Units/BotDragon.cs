@@ -29,7 +29,7 @@ namespace Scenes.Scripts.Units {
             Color = GetRandomColor();
             State = EntityState.Alive;
 
-            _health = 5;
+            _health = 2;
             _intelligence = 3;
             _prevX = x;
             _prevY = y;

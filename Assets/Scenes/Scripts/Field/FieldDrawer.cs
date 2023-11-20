@@ -24,7 +24,7 @@ namespace Scenes.Scripts.Field {
 
         public void DrawField() {
             var fieldContainer = FieldContainer.Instance;
-            //FoodFactory.Instance.FoodAdded += UpdateUnits();
+            FoodFactory.Instance.OnFoodAdded += UpdateUnits;
             if (fieldContainer != null) {
                 _width = fieldContainer.Size();
                 _height = fieldContainer.Size();
@@ -94,9 +94,11 @@ namespace Scenes.Scripts.Field {
                 InstantiateBotDragonOnTile(botDragon, newTile);
             }
 
-            if (unit is Chicken chicken) { }
-            //}
-            else { }
+            if (unit is Chicken chicken) {
+                var cords = chicken.Cords();
+                var tile = _spawnedTiles[cords.x, cords.y];
+                InstantiateFoodOnTile(chicken, tile);
+            }
         }
 
         private void DragonSubscription(BotDragon dragon) {
@@ -116,18 +118,12 @@ namespace Scenes.Scripts.Field {
 
         private void DestroyChild([NotNull] Tile tile) {
             if (tile == null) throw new ArgumentNullException(nameof(tile));
-            
-            if (tile.transform.childCount <= 0) {
-                tile.IsOccupied = false;
-                return;
+            var tileTransform = tile.transform;
+            foreach (Transform childTransform in tileTransform) {
+                Destroy(childTransform.gameObject);
             }
 
-            var child = tile.transform.GetChild(0).gameObject;
-            if (child != null) {
-                Destroy(child);
-                tile.IsOccupied = false;
-                if (tile.transform.childCount > 1) Debug.LogWarning("There are more children!");
-            }
+            tile.IsOccupied = false;
         }
 
         private void DrawBlood([NotNull] Tile tile) {
@@ -135,7 +131,7 @@ namespace Scenes.Scripts.Field {
             if (tile.transform.Cast<Transform>().Any(child => child.name.StartsWith("Blood Sprite"))) {
                 return;
             }
-            
+
             var position = tile.transform.position;
             var newCords = new Vector3(position.x, position.y, -2f);
 

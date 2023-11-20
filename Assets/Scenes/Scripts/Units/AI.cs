@@ -1,6 +1,6 @@
+using System;
 using System.Linq;
 using UnityEngine;
-
 using Scenes.Scripts.Field;
 using System.Collections.Generic;
 using Random = System.Random;
@@ -48,10 +48,9 @@ namespace Scenes.Scripts.Units {
                         y: _dragon.Cords().y + y)) {
                     return (x, y);
                 }
-
-                Debug.LogWarning($"Dragon is locked!");
             }
 
+            Debug.LogWarning($"Dragon is locked!");
             return (0, 0);
         }
 
@@ -90,34 +89,34 @@ namespace Scenes.Scripts.Units {
             }
         }
 
-        private IEnumerable<KeyValuePair<(int x, int y), int>> MoveDictionary() {
+        private IEnumerable<KeyValuePair<(int x, int y), double>> MoveDictionary() {
             SetWeight();
             var size = _weights.GetLength(0);
             var dragonCoords = _dragon.Cords();
             var center = dragonCoords;
-            int sumUp = 0, sumDown = 0, sumLeft = 0, sumRight = 0;
+            double sumUp = 0.0, sumDown = 0.0, sumLeft = 0.0, sumRight = 0.0;
 
             for (var i = 0; i < size; i++) {
                 for (var j = 0; j < size; j++) {
                     if (i < center.x) {
-                        sumUp += _weights[i, j];
+                        sumUp += Evaluate(i, j, center);
                     }
                     else if (i > center.x) {
-                        sumDown += _weights[i, j];
+                        sumDown += Evaluate(i, j, center);
                     }
 
                     if (j < center.y) {
-                        sumLeft += _weights[i, j];
+                        sumLeft += Evaluate(i, j, center);
                     }
                     else if (j > center.y) {
-                        sumRight += _weights[i, j];
+                        sumRight += Evaluate(i, j, center);
                     }
                 }
             }
 
             _sameResults = sumDown == sumUp && sumUp == sumLeft && sumLeft == sumRight;
             //Check if all results are the same;
-            var moves = new List<KeyValuePair<(int x, int y), int>> {
+            var moves = new List<KeyValuePair<(int x, int y), double>> {
                 new((-1, 0), sumUp), // Move up
                 new((1, 0), sumDown), // Move down
                 new((0, -1), sumLeft), // Move left
@@ -132,6 +131,20 @@ namespace Scenes.Scripts.Units {
                 .Select(pair => pair.Key)
                 .ToList();
             return sortedMoves;
+        }
+
+        private double Evaluate(int i, int j, (int x, int y) center) {
+            // Calculate the Manhattan distance between (i, j) and the center (dragonCoords)
+            var distanceX = Mathf.Abs(center.x - i);
+            var distanceY = Mathf.Abs(center.y - j);
+            var totalDistance = distanceX + distanceY;
+
+            var isNeighbor = totalDistance == 1;
+            // If (i, j) is a neighbor, return the weight, otherwise return the weight divided by the distance
+            if (isNeighbor && _weights[i, j] == 0) {
+                return _weights[i, j];
+            }
+            return _weights[i, j] / (totalDistance == 0 ? 1.0 : totalDistance);
         }
     }
 }

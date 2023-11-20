@@ -8,7 +8,9 @@ namespace Scenes.Scripts.Field {
     public class FoodFactory : MonoBehaviour{
         public static FoodFactory Instance;
 
-        public Action FoodAdded;
+        public delegate void FoodAction(Chicken sender);
+
+        public event FoodAction OnFoodAdded;
         
         private Random _random;
         private bool _gameStarted;
@@ -29,9 +31,8 @@ namespace Scenes.Scripts.Field {
                 var chicken = gameObject.AddComponent<Chicken>();
                 chicken.Initialization(x, y, calories);
                 if (!container.Add(chicken)) i--;
-                //else if(_gameStarted) FoodAdded!.Invoke();
+                else if(_gameStarted) OnFoodAdded?.Invoke(chicken);
             }
-            
         }
 
         public void StartGame() => _gameStarted = true;

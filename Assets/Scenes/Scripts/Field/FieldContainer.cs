@@ -33,7 +33,9 @@ namespace Scenes.Scripts.Field {
             if (dragon == null || !InitializeOnField(dragon))
                 return false;
             _dragonsQue.Enqueue(dragon);
-            if (_gameStarted && updateField) FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
+            if (_gameStarted && updateField && dragon.State != EntityState.Dead) {
+                FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
+            }
             return true;
         }
 
@@ -47,7 +49,7 @@ namespace Scenes.Scripts.Field {
                 return false;
 
             (int x, int y) = food.Cords();
-            if (!AreCoordinatesValid(x, y) || _dragons[x, y] != null)
+            if (!ValidFoodCords(x, y) || !ValidCords(x, y))
                 return false;
 
             if (_foods[x, y] != null)
@@ -56,11 +58,7 @@ namespace Scenes.Scripts.Field {
             _foods[x, y] = food;
             return true;
         }
-
-        private bool AreCoordinatesValid(int x, int y) {
-            return x >= 0 && x < _foods.GetLength(0) && y >= 0 && y < _foods.GetLength(1);
-        }
-
+        
         public void DeleteFood(int x, int y) {
             _foods[x, y] = null;
         }
@@ -68,10 +66,8 @@ namespace Scenes.Scripts.Field {
         public BotDragon GetNextDragon() {
             var next = _dragonsQue.Dequeue();
             _dragons[next.Cords().x, next.Cords().y] = null;
-            if (next.GetState() == EntityState.Dead) {
+            if (next.TimeToLive < 0)
                 return GetNextDragon();
-            }
-
             return next;
         }
 
@@ -105,6 +101,12 @@ namespace Scenes.Scripts.Field {
 
         private bool InitializeOnField(BotDragon dragon) {
             var (x, y) = dragon.Cords();
+
+            if (dragon.State == EntityState.Dead) {
+                _dragons[x, y] = dragon;
+                return true;
+            }
+
             if (!ValidCords(x, y))
                 return false;
 
@@ -115,6 +117,7 @@ namespace Scenes.Scripts.Field {
                 dragon.Eat(_foods[x, y]);
                 _foods[x, y] = null;
             }
+
             return true;
         }
 
@@ -128,6 +131,10 @@ namespace Scenes.Scripts.Field {
             }
 
             return true;
+        }
+        
+        private bool ValidFoodCords(int x, int y) {
+            return x >= 0 && x < _foods.GetLength(0) && y >= 0 && y < _foods.GetLength(1);
         }
     }
 }
