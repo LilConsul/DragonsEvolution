@@ -87,7 +87,7 @@ namespace Scenes.Scripts.Units {
                 _prevY = _y;
                 _x += delX;
                 _y += delY;
-                _health -= 1;
+                _health -= 1 / Speed;
             }
         }
 

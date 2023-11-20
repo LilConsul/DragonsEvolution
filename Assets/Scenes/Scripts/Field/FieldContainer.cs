@@ -9,7 +9,7 @@ namespace Scenes.Scripts.Field {
         public static FieldContainer Instance;
         private BotDragon[,] _dragons;
         private Chicken[,] _foods;
-        private Queue<BotDragon> _dragonsQue;
+        private LinkedList<BotDragon> _dragonsQue;
         private bool _gameStarted;
 
         private void Awake() {
@@ -20,7 +20,7 @@ namespace Scenes.Scripts.Field {
             _gameStarted = false;
             _dragons = new BotDragon[size, size];
             _foods = new Chicken[size, size];
-            _dragonsQue = new Queue<BotDragon>();
+            _dragonsQue = new LinkedList<BotDragon>();
         }
 
         public void StartGame() {
@@ -32,12 +32,27 @@ namespace Scenes.Scripts.Field {
         public bool Add(BotDragon dragon, bool updateField = true) {
             if (dragon == null || !InitializeOnField(dragon))
                 return false;
-            _dragonsQue.Enqueue(dragon);
+            _dragonsQue.AddLast(dragon);
             if (_gameStarted && updateField && dragon.State != EntityState.Dead) {
                 FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
             }
             dragon.OnMate += MateAction;
             return true;
+        }
+
+        public bool AddFirst(BotDragon dragon) {
+            if (dragon == null || !InitializeOnField(dragon))
+                return false;
+            _dragonsQue.AddFirst(dragon);
+            if (_gameStarted && dragon.State != EntityState.Dead) {
+                FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
+            }
+            dragon.OnMate += MateAction;
+            return true;
+        }
+
+        private void DragonOnOnMove(BotDragon sender) {
+            FieldDrawer.Instance.UpdateUnits<BotDragon>(sender);
         }
 
         public bool ReturnMove(BotDragon dragon) {
@@ -56,7 +71,8 @@ namespace Scenes.Scripts.Field {
         }
         
         public BotDragon GetNextDragon() {
-            var next = _dragonsQue.Dequeue();
+            var next = _dragonsQue.First.Value;
+            _dragonsQue.RemoveFirst();
             _dragons[next.Cords().x, next.Cords().y] = null;
             if (next.TimeToLive < 0)
                 return GetNextDragon();
@@ -166,7 +182,7 @@ namespace Scenes.Scripts.Field {
             return true;
         }
         
-        public (int x, int y) NearestFree(int x, int y) {
+        private (int x, int y) NearestFree(int x, int y) {
             var queue = new Queue<(int x, int y)>();
             var visited = new HashSet<(int x, int y)>();
 

@@ -12,6 +12,7 @@ namespace Scenes.Scripts.Field {
 
         private int _width = 16, _height = 9;
         private Tile[,] _spawnedTiles;
+        private BotDragon _previoslySpawned;
         [SerializeField] private Tile tilePrefab;
         [SerializeField] private Object dragonPrefab;
         [SerializeField] private Object foodPrefab;
@@ -102,8 +103,12 @@ namespace Scenes.Scripts.Field {
         }
 
         private void BotDragonOnOnTimeToLiveEnd(BotDragon sender) {
+            if(_previoslySpawned == sender) return;
+            
+            _previoslySpawned = sender;
             var cords = sender.Cords();
             DestroyChild(_spawnedTiles[cords.x, cords.y]);
+            DragonFactory.Instance.SpawnDragons(1);
         }
 
         private void BotDragonOnDeath(BotDragon sender) {

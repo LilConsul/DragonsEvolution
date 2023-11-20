@@ -7,8 +7,10 @@ namespace Scenes.Scripts.Globals {
     public class GameUI : MonoBehaviour {
         [SerializeField] private float botUpdateDelay;
         private AI _ai;
+        private int _i;
 
         private void Start() {
+            _i = 0;
             FieldContainer.Instance.SetSize(15);
 
             //FieldGenerator.Instance.GeneratePreset();
@@ -34,43 +36,32 @@ namespace Scenes.Scripts.Globals {
                 return;
             }
 
-            PerformMove(dragon);
+            var nextMove = _ai.GetNextMove(dragon);
+            if (nextMove.mate == false) {
+                dragon.Move(nextMove.x, nextMove.y);
+            }
+            else {
+                dragon.Mate(nextMove.x, nextMove.y);
+            }
 
+            if (_i < dragon.Speed) {
+                _i++;
+                if (!FieldContainer.Instance.AddFirst(dragon)) {
+                    Debug.LogWarning($"Dragon on {dragon.Cords()} not moved!");
+                    FieldContainer.Instance.ReturnMove(dragon);
+                }
+
+                Invoke(nameof(BotUpdate), botUpdateDelay / 3);
+                return;
+            }
+
+            _i = 0;
             if (!FieldContainer.Instance.Add(dragon)) {
                 Debug.LogWarning($"Dragon on {dragon.Cords()} not moved!");
                 FieldContainer.Instance.ReturnMove(dragon);
             }
 
             Invoke(nameof(BotUpdate), botUpdateDelay);
-        }
-
-        private void PerformMove(BotDragon dragon) {
-            var nextMove = _ai.GetNextMove(dragon);
-            if (nextMove.mate == false){
-                dragon.Move(nextMove.x, nextMove.y);
-            }
-            else {
-                dragon.Mate(nextMove.x, nextMove.y);
-            }
-        }
-        
-        private void Print(BotDragon who, int[,] input) {
-            var rows = input.GetLength(0);
-            var cols = input.GetLength(1);
-
-            (var x, var y) = who != null ? who.Cords() : (-100, -100);
-            var matrixString = "Matrix:\n";
-
-            for (var i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    if (i == x && j == y) matrixString += "Me!" + "\t";
-                    else matrixString += input[i, j].ToString("F1") + "\t";
-                }
-
-                matrixString += "\n";
-            }
-
-            Debug.Log(matrixString);
         }
     }
 }
