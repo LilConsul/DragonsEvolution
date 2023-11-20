@@ -35,7 +35,7 @@ namespace Scenes.Scripts.Units {
             return _weights;
         }
 
-        public (int x, int y) GetNextMove(BotDragon dragon) {
+        public (int x, int y, bool mate) GetNextMove(BotDragon dragon) {
             SetInitialization(dragon);
             var sortedMoves = SortedMoves();
             if (_sameResults) {
@@ -43,15 +43,19 @@ namespace Scenes.Scripts.Units {
             }
 
             foreach (var (x, y) in sortedMoves) {
-                if (FieldContainer.Instance.ValidCords(
+                if (FieldContainer.Instance.ValidDragonCords(
                         x: _dragon.Cords().x + x,
                         y: _dragon.Cords().y + y)) {
-                    return (x, y);
+                    return (x, y, false);
+                }
+
+                if (FieldContainer.Instance.CanMate( _dragon, x: _dragon.Cords().x + x, y: _dragon.Cords().y + y)) {
+                    return (x, y, true);
                 }
             }
 
             Debug.LogWarning($"Dragon is locked!");
-            return (0, 0);
+            return (0, 0, false);
         }
 
         private List<(int x, int y)> RandomMove(List<(int x, int y)> sortedMoves) {
@@ -84,6 +88,11 @@ namespace Scenes.Scripts.Units {
                         var myDrag = _dragons[i, j];
                         if (myDrag.State == EntityState.Dead) {
                             _weights[i, j] = 0;
+                            continue;
+                        }
+
+                        if (myDrag.IsParent || _dragon.IsParent) {
+                            _weights[i, j] = -1;
                             continue;
                         }
                         _weights[i, j] = myDrag.Color == _dragon.Color ? -1 : 5;

@@ -25,6 +25,7 @@ namespace Scenes.Scripts.Field {
         public void DrawField() {
             var fieldContainer = FieldContainer.Instance;
             FoodFactory.Instance.OnFoodAdded += UpdateUnits;
+            DragonFactory.Instance.OnDragonAdded += UpdateUnits;
             if (fieldContainer != null) {
                 _width = fieldContainer.Size();
                 _height = fieldContainer.Size();
@@ -71,8 +72,6 @@ namespace Scenes.Scripts.Field {
         }
 
         private Vector3 MakeVector(float i, float j) {
-            /*var size = FieldContainer.Instance.Size();
-            return new Vector3(j, size - i - 1, -1f);*/
             return new Vector3(i, j, -1f);
         }
 

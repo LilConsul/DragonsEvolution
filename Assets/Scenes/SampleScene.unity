@@ -338,7 +338,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7458463890690710255, guid: d40ae30a3598a7a438dd81448f3183e5, type: 3}
       propertyPath: botUpdateDelay
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7458463890690710255, guid: d40ae30a3598a7a438dd81448f3183e5, type: 3}
       propertyPath: fieldDrawerPrefab
@@ -713,6 +713,75 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+--- !u!1001 &5622180011961887988
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.624173
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.0197978
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -43.74704
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600393568573529798, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8317976550699408180, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: evolutionRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8317976550699408180, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: evolutionChance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8317976550699408180, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: degradationChance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8918370616422621180, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
+      propertyPath: m_Name
+      value: DragonFactory
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 075b8a7a74071454bab986fd63ca3e54, type: 3}
 --- !u!1001 &6201391925711086763
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -955,3 +1024,4 @@ SceneRoots:
   - {fileID: 6201391925711086763}
   - {fileID: 8309294874419408407}
   - {fileID: 7108005155192780565}
+  - {fileID: 5622180011961887988}

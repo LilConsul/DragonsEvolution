@@ -7,6 +7,7 @@ namespace Scenes.Scripts.Units {
     public class BotDragon : MonoBehaviour {
         [SerializeField] private SpriteRenderer _renderer;
         public int TimeToLive { get; set; }
+        public bool IsParent { get; set; }
         private Chicken _prevEaten;
         private int _prevX;
         private int _prevY;
@@ -16,18 +17,46 @@ namespace Scenes.Scripts.Units {
         private double _health;
         private double _speed;
         private double _intelligence;
+
+        public double Health {
+            get => _health;
+            set {
+                if (value > 0)
+                    _health = value;
+                _health = 5;
+            }
+        }
+        public double Speed {
+            get => _speed;
+            set {
+                if (value > 0)
+                    _speed = value;
+                _speed = 1;
+            }
+        }
+        public double Intelect {
+            get => _intelligence;
+            set {
+                if (value > 0)
+                    _intelligence = value;
+                _intelligence = 3;
+            }
+        }
         public EntityState State { get; set; }
 
         public delegate void DragonAction(BotDragon sender);
+        public delegate void DragonBirth(BotDragon sender, int x, int y);
         public event DragonAction OnTimeToLiveEnd;
         public event DragonAction OnDeath;
+        public event DragonBirth OnMate;
 
         public Colors Color { get; set; }
 
-        public void Initialization(int x, int y) {
+       public void Initialization(int x, int y) {
             TimeToLive = 5;
             Color = GetRandomColor();
             State = EntityState.Alive;
+            IsParent = false;
 
             _health = 2;
             _intelligence = 3;
@@ -36,12 +65,11 @@ namespace Scenes.Scripts.Units {
             _x = x;
             _y = y;
         }
-
+       
         public void Move(int delX, int delY) {
             if (State == EntityState.Dead) {
                 TimeToLive -= 1;
                 if (TimeToLive < 0){
-                    Debug.LogWarning("Time to live end!");
                     OnTimeToLiveEnd?.Invoke(this);
                 }
                 return;
@@ -53,7 +81,7 @@ namespace Scenes.Scripts.Units {
                 return;
             }
 
-            if (FieldContainer.Instance.ValidCords(_x + delX, _y + delY)) {
+            if (FieldContainer.Instance.ValidDragonCords(_x + delX, _y + delY)) {
                 _prevEaten = null;
                 _prevX = _x;
                 _prevY = _y;
@@ -74,6 +102,10 @@ namespace Scenes.Scripts.Units {
             return State;
         }
 
+        public void Mate(int delX, int delY) {
+            OnMate?.Invoke(this, _x + delX, _y + delY);
+        }
+        
         private Colors GetRandomColor() {
             var colors = Enum.GetValues(typeof(Colors));
             return (Colors)colors.GetValue(UnityEngine.Random.Range(0, colors.Length - 1));

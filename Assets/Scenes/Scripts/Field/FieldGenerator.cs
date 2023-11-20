@@ -1,17 +1,13 @@
 using Scenes.Scripts.Units;
 using Unity.VisualScripting;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Scenes.Scripts.Field {
     public class FieldGenerator : MonoBehaviour {
         public static FieldGenerator Instance;
-
-        private Random _random;
-
+        
         private void Awake() {
             Instance = this;
-            _random = new Random();
         }
 
         public void GeneratePreset() {
@@ -31,25 +27,8 @@ namespace Scenes.Scripts.Field {
         }
 
         public void CustomGenerator(int numDragons, int numFood) {
-            var container = FieldContainer.Instance;
-            var size = container.Size();
-
-            // Generate Dragons
-            for (var i = 0; i < numDragons; i++) {
-                var x = RandomCoordinate(size);
-                var y = RandomCoordinate(size);
-                var dragon = gameObject.AddComponent<BotDragon>();
-                dragon.Initialization(x, y);
-                if (!container.Add(dragon))
-                    i--;
-            }
-
-            // Generate Food
+            DragonFactory.Instance.SpawnDragons(numDragons);
             FoodFactory.Instance.SpawnFood(numFood);
-        }
-
-        private int RandomCoordinate(int size) {
-            return _random.Next(size);
         }
     }
 }

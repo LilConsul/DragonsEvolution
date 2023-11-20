@@ -33,9 +33,8 @@ namespace Scenes.Scripts.Globals {
                 FieldContainer.Instance.Add(dragon);
                 return;
             }
-            
-            var nextMove = _ai.GetNextMove(dragon);
-            dragon.Move(nextMove.x, nextMove.y);
+
+            PerformMove(dragon);
 
             if (!FieldContainer.Instance.Add(dragon)) {
                 Debug.LogWarning($"Dragon on {dragon.Cords()} not moved!");
@@ -45,6 +44,16 @@ namespace Scenes.Scripts.Globals {
             Invoke(nameof(BotUpdate), botUpdateDelay);
         }
 
+        private void PerformMove(BotDragon dragon) {
+            var nextMove = _ai.GetNextMove(dragon);
+            if (nextMove.mate == false){
+                dragon.Move(nextMove.x, nextMove.y);
+            }
+            else {
+                dragon.Mate(nextMove.x, nextMove.y);
+            }
+        }
+        
         private void Print(BotDragon who, int[,] input) {
             var rows = input.GetLength(0);
             var cols = input.GetLength(1);

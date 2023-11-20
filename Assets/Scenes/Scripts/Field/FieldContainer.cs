@@ -26,6 +26,7 @@ namespace Scenes.Scripts.Field {
         public void StartGame() {
             _gameStarted = true;
             FoodFactory.Instance.StartGame();
+            DragonFactory.Instance.StartGame();
         }
 
         public bool Add(BotDragon dragon, bool updateField = true) {
@@ -35,7 +36,7 @@ namespace Scenes.Scripts.Field {
             if (_gameStarted && updateField && dragon.State != EntityState.Dead) {
                 FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
             }
-
+            dragon.OnMate += MateAction;
             return true;
         }
 
@@ -47,19 +48,13 @@ namespace Scenes.Scripts.Field {
         public bool Add(Chicken food) {
             if (food == null)
                 return false;
-
-            (int x, int y) = food.Cords();
-            if (!ValidFoodCords(x, y) || !ValidCords(x, y))
-                return false;
+            var (x, y) = food.Cords();
+            if (!ValidFoodCords(x, y) || !ValidDragonCords(x, y)) return false;
 
             _foods[x, y] = food;
             return true;
         }
-
-        public void DeleteFood(int x, int y) {
-            _foods[x, y] = null;
-        }
-
+        
         public BotDragon GetNextDragon() {
             var next = _dragonsQue.Dequeue();
             _dragons[next.Cords().x, next.Cords().y] = null;
@@ -104,7 +99,7 @@ namespace Scenes.Scripts.Field {
                 return true;
             }
 
-            if (!ValidCords(x, y))
+            if (!ValidDragonCords(x, y))
                 return false;
 
             _dragons[x, y] = dragon;
@@ -117,10 +112,41 @@ namespace Scenes.Scripts.Field {
             return true;
         }
 
-        public bool ValidCords(int x, int y) {
+        private void MateAction(BotDragon sender, int x, int y) {
+            if(!CanMate(sender, x, y)) return;
+            var dragon = _dragons[x, y];
+            if(dragon.IsParent || sender.IsParent) return;
+            
+            dragon.Color = sender.Color;
+            dragon.IsParent = sender.IsParent = true;
+            
+            var newSpeed = (sender.Speed + dragon.Speed) / 2;
+            var newIntelect = (sender.Intelect + dragon.Intelect) / 2;
+            var newFood = (dragon.Health + sender.Health) / 2;
+            dragon.Health = sender.Health = newFood;
+
+            DragonFactory.Instance.SpawnSpecialDragon(cords: NearestFree(x, y), 
+                newFood, newSpeed, newIntelect, dragon.Color);
+            
+            FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
+            FieldDrawer.Instance.UpdateUnits<BotDragon>(sender);
+        }
+        
+        public bool CanMate(BotDragon sender, int x, int y) {
             try {
-                if (_dragons[x, y] != null)
-                    return false;
+                var dragon = _dragons[x, y];
+                if (dragon == null) return false;
+                if (sender.Color == dragon.Color) return false;
+                if (sender.IsParent || dragon.IsParent) return false;
+                var cords = sender.Cords();
+                return Mathf.Abs(cords.x - x) + Mathf.Abs(cords.y - y) == 1;
+            }
+            catch (IndexOutOfRangeException) { return false; }
+        }
+
+        public bool ValidDragonCords(int x, int y) {
+            try {
+                if (_dragons[x, y] != null) return false;
             }
             catch (IndexOutOfRangeException) {
                 return false;
@@ -130,9 +156,48 @@ namespace Scenes.Scripts.Field {
         }
 
         private bool ValidFoodCords(int x, int y) {
-            try { if (_foods[x, y] != null) return false; }
-            catch (IndexOutOfRangeException) { return false; }
+            try {
+                if (_foods[x, y] != null) return false;
+            }
+            catch (IndexOutOfRangeException) {
+                return false;
+            }
+
             return true;
+        }
+        
+        public (int x, int y) NearestFree(int x, int y) {
+            var queue = new Queue<(int x, int y)>();
+            var visited = new HashSet<(int x, int y)>();
+
+            queue.Enqueue((x, y));
+            visited.Add((x, y));
+
+            while (queue.Count > 0) {
+                var current = queue.Dequeue();
+                if (ValidDragonCords(current.x, current.y) && ValidFoodCords(current.x, current.y)) {
+                    return current; 
+                }
+                EnqueueAdjacentCoordinates(current.x, current.y, queue, visited);
+            }
+
+            return (x, y);
+        }
+        private void EnqueueAdjacentCoordinates(int x, int y, Queue<(int x, int y)> queue, HashSet<(int x, int y)> visited) {
+            int[] dx = { 1, -1, 0, 0 };
+            int[] dy = { 0, 0, 1, -1 };
+
+            for (var i = 0; i < 4; i++) {
+                var newX = x + dx[i];
+                var newY = y + dy[i];
+
+                var newCoord = (newX, newY);
+
+                if (!visited.Contains(newCoord) && newX >= 0 && newX < Size() && newY >= 0 && newY < Size()) {
+                    visited.Add(newCoord);
+                    queue.Enqueue(newCoord);
+                }
+            }
         }
     }
 }
