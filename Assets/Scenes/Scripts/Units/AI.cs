@@ -11,7 +11,7 @@ namespace Scenes.Scripts.Units {
         private bool _sameResults;
         private BotDragon _dragon;
         private BotDragon[,] _dragons;
-        private Chicken[,] _chickens;
+        private Food[,] _chickens;
 
         private void SetInitialization(BotDragon dragon) {
             if (dragon == null) {
@@ -26,9 +26,7 @@ namespace Scenes.Scripts.Units {
             var (x, y) = dragon.Cords();
             _dragon = dragon;
             _dragons = container.GetUnitsField<BotDragon>(x, y, size);
-            _chickens = container.GetUnitsField<Chicken>(x, y, size);
-            /*_dragons = container.GetUnitsField<BotDragon>();
-            _chickens = container.GetUnitsField<Chicken>();*/
+            _chickens = container.GetUnitsField<Food>(x, y, size);
         }
 
         public int[,] TakeWeight() {
@@ -96,7 +94,6 @@ namespace Scenes.Scripts.Units {
                             continue;
                         }
                         _weights[i, j] = myDrag.Color == _dragon.Color ? -1 : 5;
-                        continue;
                     }
                 }
             }

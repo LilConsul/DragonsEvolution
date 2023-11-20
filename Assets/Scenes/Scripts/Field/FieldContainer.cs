@@ -8,7 +8,7 @@ namespace Scenes.Scripts.Field {
     public class FieldContainer : MonoBehaviour {
         public static FieldContainer Instance;
         private BotDragon[,] _dragons;
-        private Chicken[,] _foods;
+        private Food[,] _foods;
         private LinkedList<BotDragon> _dragonsQue;
         private bool _gameStarted;
 
@@ -19,7 +19,7 @@ namespace Scenes.Scripts.Field {
         public void SetSize(uint size) {
             _gameStarted = false;
             _dragons = new BotDragon[size, size];
-            _foods = new Chicken[size, size];
+            _foods = new Food[size, size];
             _dragonsQue = new LinkedList<BotDragon>();
         }
 
@@ -51,16 +51,12 @@ namespace Scenes.Scripts.Field {
             return true;
         }
 
-        private void DragonOnOnMove(BotDragon sender) {
-            FieldDrawer.Instance.UpdateUnits<BotDragon>(sender);
-        }
-
-        public bool ReturnMove(BotDragon dragon) {
+        public void ReturnMove(BotDragon dragon) {
             dragon.Move(dragon.PrevCords().x, dragon.PrevCords().y);
-            return Add(dragon, false);
+            Add(dragon, false);
         }
 
-        public bool Add(Chicken food) {
+        public bool Add(Food food) {
             if (food == null)
                 return false;
             var (x, y) = food.Cords();
@@ -80,7 +76,7 @@ namespace Scenes.Scripts.Field {
         }
 
         public T[,] GetUnitsField<T>() {
-            if (typeof(T) == typeof(Chicken))
+            if (typeof(T) == typeof(Food))
                 return _foods as T[,];
 
             if (typeof(T) == typeof(BotDragon))
@@ -91,8 +87,8 @@ namespace Scenes.Scripts.Field {
         }
 
         public T[,] GetUnitsField<T>(int x, int y, int radius) {
-            if (typeof(T) == typeof(Chicken)) {
-                var remover = new RadiusRemover<Chicken>();
+            if (typeof(T) == typeof(Food)) {
+                var remover = new RadiusRemover<Food>();
                 return remover.RemoveRadius(_foods, x, y, radius) as T[,];
             }
 
@@ -137,12 +133,12 @@ namespace Scenes.Scripts.Field {
             dragon.IsParent = sender.IsParent = true;
             
             var newSpeed = (sender.Speed + dragon.Speed) / 2;
-            var newIntelect = (sender.Intelect + dragon.Intelect) / 2;
+            var newIntellect = (sender.Intellect + dragon.Intellect) / 2;
             var newFood = (dragon.Health + sender.Health) / 2;
             dragon.Health = sender.Health = newFood;
 
             DragonFactory.Instance.SpawnSpecialDragon(cords: NearestFree(x, y), 
-                newFood, newSpeed, newIntelect, dragon.Color);
+                newFood, newSpeed, newIntellect, dragon.Color);
             
             FieldDrawer.Instance.UpdateUnits<BotDragon>(dragon);
             FieldDrawer.Instance.UpdateUnits<BotDragon>(sender);

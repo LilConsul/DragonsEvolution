@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace Scenes.Scripts.Units {
-    public class Chicken : MonoBehaviour {
+    public class Food : MonoBehaviour {
         [SerializeField] private SpriteRenderer _renderer;
         private int _x;
         private int _y;

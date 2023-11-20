@@ -6,9 +6,9 @@ using UnityEngine;
 namespace Scenes.Scripts.Units {
     public class BotDragon : MonoBehaviour {
         [SerializeField] private SpriteRenderer _renderer;
-        public int TimeToLive { get; set; }
+        public int TimeToLive { get; private set; }
         public bool IsParent { get; set; }
-        private Chicken _prevEaten;
+        private Food _prevEaten;
         private int _prevX;
         private int _prevY;
         private int _x;
@@ -34,7 +34,7 @@ namespace Scenes.Scripts.Units {
                 _speed = 1;
             }
         }
-        public double Intelect {
+        public double Intellect {
             get => _intelligence;
             set {
                 if (value > 0)
@@ -42,7 +42,7 @@ namespace Scenes.Scripts.Units {
                 _intelligence = 3;
             }
         }
-        public EntityState State { get; set; }
+        public EntityState State { get; private set; }
 
         public delegate void DragonAction(BotDragon sender);
         public delegate void DragonBirth(BotDragon sender, int x, int y);
@@ -91,7 +91,7 @@ namespace Scenes.Scripts.Units {
             }
         }
 
-        public void Eat(Chicken food) {
+        public void Eat(Food food) {
             if (food == null)
                 return;
             _prevEaten = food;
@@ -114,7 +114,7 @@ namespace Scenes.Scripts.Units {
         public (int x, int y) Cords() => (_x, _y);
         public (int x, int y) PrevCords() => (_prevX, _prevY);
         public void Init(Sprite sprite) => _renderer.sprite = sprite;
-        public Chicken PrevEaten() => _prevEaten;
+        public Food PrevEaten() => _prevEaten;
         public int GetIntelligence() => (int)_intelligence;
     }
 }

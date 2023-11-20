@@ -7,10 +7,10 @@ namespace Scenes.Scripts.Globals {
     public class GameUI : MonoBehaviour {
         [SerializeField] private float botUpdateDelay;
         private AI _ai;
-        private int _i;
+        private int _turns;
 
         private void Start() {
-            _i = 0;
+            _turns = 0;
             FieldContainer.Instance.SetSize(15);
 
             //FieldGenerator.Instance.GeneratePreset();
@@ -18,7 +18,7 @@ namespace Scenes.Scripts.Globals {
 
             FieldDrawer.Instance.DrawField();
             FieldDrawer.Instance.RenderUnits<BotDragon>();
-            FieldDrawer.Instance.RenderUnits<Chicken>();
+            FieldDrawer.Instance.RenderUnits<Food>();
 
             FieldContainer.Instance.StartGame();
             _ai = gameObject.AddComponent<AI>();
@@ -44,8 +44,8 @@ namespace Scenes.Scripts.Globals {
                 dragon.Mate(nextMove.x, nextMove.y);
             }
 
-            if (_i < dragon.Speed) {
-                _i++;
+            if (_turns < dragon.Speed) {
+                _turns++;
                 if (!FieldContainer.Instance.AddFirst(dragon)) {
                     Debug.LogWarning($"Dragon on {dragon.Cords()} not moved!");
                     FieldContainer.Instance.ReturnMove(dragon);
@@ -55,7 +55,7 @@ namespace Scenes.Scripts.Globals {
                 return;
             }
 
-            _i = 0;
+            _turns = 0;
             if (!FieldContainer.Instance.Add(dragon)) {
                 Debug.LogWarning($"Dragon on {dragon.Cords()} not moved!");
                 FieldContainer.Instance.ReturnMove(dragon);

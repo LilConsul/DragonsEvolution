@@ -12,7 +12,7 @@ namespace Scenes.Scripts.Field {
 
         private int _width = 16, _height = 9;
         private Tile[,] _spawnedTiles;
-        private BotDragon _previoslySpawned;
+        private BotDragon _previouslySpawned;
         [SerializeField] private Tile tilePrefab;
         [SerializeField] private Object dragonPrefab;
         [SerializeField] private Object foodPrefab;
@@ -61,8 +61,8 @@ namespace Scenes.Scripts.Field {
                         case BotDragon:
                             InstantiateBotDragonOnTile(units[i, j] as BotDragon, currentTile);
                             break;
-                        case Chicken:
-                            InstantiateFoodOnTile(units[i, j] as Chicken, currentTile);
+                        case Food:
+                            InstantiateFoodOnTile(units[i, j] as Food, currentTile);
                             break;
                         default:
                             Debug.LogWarning($"The prefab doesn't have a {typeof(T).Name} component.");
@@ -90,7 +90,7 @@ namespace Scenes.Scripts.Field {
                 InstantiateBotDragonOnTile(botDragon, newTile);
             }
 
-            if (unit is Chicken chicken) {
+            if (unit is Food chicken) {
                 var cords = chicken.Cords();
                 var tile = _spawnedTiles[cords.x, cords.y];
                 InstantiateFoodOnTile(chicken, tile);
@@ -103,9 +103,9 @@ namespace Scenes.Scripts.Field {
         }
 
         private void BotDragonOnOnTimeToLiveEnd(BotDragon sender) {
-            if(_previoslySpawned == sender) return;
+            if(_previouslySpawned == sender) return;
             
-            _previoslySpawned = sender;
+            _previouslySpawned = sender;
             var cords = sender.Cords();
             DestroyChild(_spawnedTiles[cords.x, cords.y]);
             DragonFactory.Instance.SpawnDragons(1);
@@ -122,8 +122,6 @@ namespace Scenes.Scripts.Field {
             foreach (Transform childTransform in tileTransform) {
                 Destroy(childTransform.gameObject);
             }
-
-            tile.IsOccupied = false;
         }
 
         private void DrawBlood([NotNull] Tile tile) {
@@ -156,22 +154,20 @@ namespace Scenes.Scripts.Field {
                 DragonSubscription(botDragon);
 
                 unitObject.transform.parent = tile.transform;
-                unitObject.name = $"{typeof(BotDragon).Name} {newCords.x} {newCords.y}";
-                tile.IsOccupied = true;
+                unitObject.name = $"{nameof(BotDragon)} {newCords.x} {newCords.y}";
             }
         }
 
-        private void InstantiateFoodOnTile(Chicken food, Tile tile) {
+        private void InstantiateFoodOnTile(Food food, Tile tile) {
             var newCords = MakeVector(food.Cords().x, food.Cords().y);
             var unitObject = Instantiate(foodPrefab,
                 position: newCords,
                 Quaternion.identity) as GameObject;
 
-            var unitComponent = unitObject!.GetComponent<Chicken>();
+            var unitComponent = unitObject!.GetComponent<Food>();
             if (unitComponent != null) {
                 unitObject.transform.parent = tile.transform;
-                unitObject.name = $"{typeof(Chicken).Name} {newCords.x} {newCords.y}";
-                tile.IsOccupied = true;
+                unitObject.name = $"{nameof(Food)} {newCords.x} {newCords.y}";
             }
         }
     }

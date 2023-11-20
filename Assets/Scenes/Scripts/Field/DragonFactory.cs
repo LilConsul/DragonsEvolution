@@ -2,7 +2,6 @@ using System;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Units;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Scenes.Scripts.Field {
@@ -36,24 +35,24 @@ namespace Scenes.Scripts.Field {
             }
         }
 
-        public void SpawnSpecialDragon((int x, int y) cords, double newFood, double newSpeed,  double newIntelect, Colors color) {
+        public void SpawnSpecialDragon((int x, int y) cords, double food, double speed,  double intellect, Colors color) {
             if (Random.Range(0f, 100f) > evolutionChance) {
-                newFood += Random.Range(0f, evolutionRange);
-                newSpeed += Random.Range(0f, evolutionRange);
-                newIntelect += Random.Range(0f, evolutionRange);
+                food += Random.Range(0f, evolutionRange);
+                speed += Random.Range(0f, evolutionRange);
+                intellect += Random.Range(0f, evolutionRange);
             }
             else if(Random.Range(0f, 100f) > degradationChance){
-                newFood -= Random.Range(0f, evolutionRange);
-                newSpeed -= Random.Range(0f, evolutionRange);
-                newIntelect -= Random.Range(0f, evolutionRange);
+                food -= Random.Range(0f, evolutionRange);
+                speed -= Random.Range(0f, evolutionRange);
+                intellect -= Random.Range(0f, evolutionRange);
             }
 
             var dragon = gameObject.AddComponent<BotDragon>();
             dragon.Initialization(cords.x, cords.y);
             dragon.Color = color;
-            dragon.Health = newFood;
-            dragon.Speed = newSpeed;
-            dragon.Intelect = newIntelect;
+            dragon.Health = food;
+            dragon.Speed = speed;
+            dragon.Intellect = intellect;
             
             FieldContainer.Instance.Add(dragon);
             if(_gameStarted) OnDragonAdded?.Invoke(dragon);
