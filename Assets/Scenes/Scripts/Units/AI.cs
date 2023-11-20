@@ -1,13 +1,13 @@
-using Scenes.Scripts.Field;
-using UnityEngine;
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+
+using Scenes.Scripts.Field;
+using System.Collections.Generic;
 using Random = System.Random;
 
 namespace Scenes.Scripts.Units {
     public class AI : MonoBehaviour {
-        private int[,] weights;
+        private int[,] _weights;
         private bool _sameResults;
         private BotDragon _dragon;
         private BotDragon[,] _dragons;
@@ -20,10 +20,10 @@ namespace Scenes.Scripts.Units {
 
             var container = FieldContainer.Instance;
 
-            weights = new int[container.Size(), container.Size()];
+            _weights = new int[container.Size(), container.Size()];
 
             var size = dragon.GetIntelligence();
-            (int x, int y) = dragon.Cords();
+            var (x, y) = dragon.Cords();
             _dragon = dragon;
             _dragons = container.GetUnitsField<BotDragon>(x, y, size);
             _chickens = container.GetUnitsField<Chicken>(x, y, size);
@@ -32,7 +32,7 @@ namespace Scenes.Scripts.Units {
         }
 
         public int[,] TakeWeight() {
-            return weights;
+            return _weights;
         }
 
         public (int x, int y) GetNextMove(BotDragon dragon) {
@@ -43,8 +43,9 @@ namespace Scenes.Scripts.Units {
             }
 
             foreach (var (x, y) in sortedMoves) {
-                if (FieldContainer.Instance.ValidCords(_dragon.Cords().x + x, _dragon.Cords().y + y)) {
-                    Debug.LogWarning($"The best move is {x} {y}");
+                if (FieldContainer.Instance.ValidCords(
+                        x: _dragon.Cords().x + x,
+                        y: _dragon.Cords().y + y)) {
                     return (x, y);
                 }
 
@@ -60,28 +61,29 @@ namespace Scenes.Scripts.Units {
                 var j = rand.Next(0, i + 1);
                 (sortedMoves[i], sortedMoves[j]) = (sortedMoves[j], sortedMoves[i]);
             }
+
             return sortedMoves;
         }
 
         private void SetWeight() {
-            int size = _dragons.GetLength(0);
+            var size = _dragons.GetLength(0);
             var dragonCoords = _dragon.Cords();
 
             for (var i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     if ((i, j) == dragonCoords) {
-                        weights[i, j] = 0;
+                        _weights[i, j] = 0;
                         continue;
                     }
 
                     if (_chickens[i, j] != null) {
-                        weights[i, j] = _chickens[i, j].GetCalories();
+                        _weights[i, j] = _chickens[i, j].GetCalories();
                         continue;
                     }
 
                     if (_dragons[i, j] != null) {
                         var myDrag = _dragons[i, j];
-                        weights[i, j] = myDrag.Color == _dragon.Color ? -100 : 50;
+                        _weights[i, j] = myDrag.Color == _dragon.Color ? -1 : 5;
                         continue;
                     }
                 }
@@ -90,7 +92,7 @@ namespace Scenes.Scripts.Units {
 
         private IEnumerable<KeyValuePair<(int x, int y), int>> MoveDictionary() {
             SetWeight();
-            var size = weights.GetLength(0);
+            var size = _weights.GetLength(0);
             var dragonCoords = _dragon.Cords();
             var center = dragonCoords;
             int sumUp = 0, sumDown = 0, sumLeft = 0, sumRight = 0;
@@ -98,21 +100,20 @@ namespace Scenes.Scripts.Units {
             for (var i = 0; i < size; i++) {
                 for (var j = 0; j < size; j++) {
                     if (i < center.x) {
-                        sumUp += weights[i, j];
+                        sumUp += _weights[i, j];
                     }
                     else if (i > center.x) {
-                        sumDown += weights[i, j];
+                        sumDown += _weights[i, j];
                     }
 
                     if (j < center.y) {
-                        sumLeft += weights[i, j];
+                        sumLeft += _weights[i, j];
                     }
                     else if (j > center.y) {
-                        sumRight += weights[i, j];
+                        sumRight += _weights[i, j];
                     }
                 }
             }
-
 
             _sameResults = sumDown == sumUp && sumUp == sumLeft && sumLeft == sumRight;
             //Check if all results are the same;

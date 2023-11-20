@@ -18,7 +18,9 @@ namespace Scenes.Scripts.Units {
         private double _intelligence;
         public EntityState State { get; set; }
 
-        public event Action OnTimeToLiveEnd;
+        public delegate void DragonAction(BotDragon sender);
+        public event DragonAction OnTimeToLiveEnd;
+        public event DragonAction OnDeath;
 
         public Colors Color { get; set; }
 
@@ -27,7 +29,7 @@ namespace Scenes.Scripts.Units {
             Color = GetRandomColor();
             State = EntityState.Alive;
 
-            _health = 10;
+            _health = 5;
             _intelligence = 3;
             _prevX = x;
             _prevY = y;
@@ -38,13 +40,16 @@ namespace Scenes.Scripts.Units {
         public void Move(int delX, int delY) {
             if (State == EntityState.Dead) {
                 TimeToLive -= 1;
-                if (TimeToLive < 0)
-                    OnTimeToLiveEnd?.Invoke();
+                if (TimeToLive < 0){
+                    Debug.LogWarning("Time to live end!");
+                    OnTimeToLiveEnd?.Invoke(this);
+                }
+                return;
             }
 
             if (_health < 0) {
                 State = EntityState.Dead;
-                Color = Colors.Dead;
+                OnDeath?.Invoke(this);
                 return;
             }
 

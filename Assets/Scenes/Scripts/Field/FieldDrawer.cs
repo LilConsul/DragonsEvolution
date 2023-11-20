@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using JetBrains.Annotations;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Units;
 using UnityEngine;
@@ -13,7 +15,7 @@ namespace Scenes.Scripts.Field {
         [SerializeField] private Tile tilePrefab;
         [SerializeField] private Object dragonPrefab;
         [SerializeField] private Object foodPrefab;
-        [SerializeField] private Object bloodPrefab;
+        [SerializeField] private Object bloodSprite;
         [SerializeField] private DragonColors dragonsSprite;
 
         private void Awake() {
@@ -72,7 +74,7 @@ namespace Scenes.Scripts.Field {
             }
         }
 
-        private Vector3 MakeVector(int i, int j) {
+        private Vector3 MakeVector(float i, float j) {
             /*var size = FieldContainer.Instance.Size();
             return new Vector3(j, size - i - 1, -1f);*/
             return new Vector3(i, j, -1f);
@@ -82,7 +84,6 @@ namespace Scenes.Scripts.Field {
             if (unit is BotDragon botDragon) {
                 var prevCords = botDragon.PrevCords();
                 var newCords = botDragon.Cords();
-                botDragon.OnTimeToLiveEnd += BotDragonOnOnTimeToLiveEnd;
 
                 var prevTile = _spawnedTiles[prevCords.x, prevCords.y];
                 var newTile = _spawnedTiles[newCords.x, newCords.y];
@@ -93,31 +94,57 @@ namespace Scenes.Scripts.Field {
                 InstantiateBotDragonOnTile(botDragon, newTile);
             }
 
-            if (unit is Chicken chicken) {
-                
-            }
+            if (unit is Chicken chicken) { }
             //}
             else { }
         }
 
-        private void BotDragonOnOnTimeToLiveEnd() {
-            RenderUnits<BotDragon>();
+        private void DragonSubscription(BotDragon dragon) {
+            dragon.OnTimeToLiveEnd += BotDragonOnOnTimeToLiveEnd;
+            dragon.OnDeath += BotDragonOnDeath;
         }
 
-        private void DestroyChild(Tile tile) {
-            if (tile == null || tile.transform.childCount <= 0) return;
+        private void BotDragonOnOnTimeToLiveEnd(BotDragon sender) {
+            var cords = sender.Cords();
+            DestroyChild(_spawnedTiles[cords.x, cords.y]);
+        }
+
+        private void BotDragonOnDeath(BotDragon sender) {
+            var cords = sender.Cords();
+            DrawBlood(_spawnedTiles[cords.x, cords.y]);
+        }
+
+        private void DestroyChild([NotNull] Tile tile) {
+            if (tile == null) throw new ArgumentNullException(nameof(tile));
+            
+            if (tile.transform.childCount <= 0) {
+                tile.IsOccupied = false;
+                return;
+            }
+
             var child = tile.transform.GetChild(0).gameObject;
             if (child != null) {
                 Destroy(child);
                 tile.IsOccupied = false;
+                if (tile.transform.childCount > 1) Debug.LogWarning("There are more children!");
             }
         }
 
-        private void DrawBlood(Tile tile) {
+        private void DrawBlood([NotNull] Tile tile) {
+            if (tile == null) throw new NullReferenceException($"The tile {tile.transform} is null");
+            if (tile.transform.Cast<Transform>().Any(child => child.name.StartsWith("Blood Sprite"))) {
+                return;
+            }
+            
             var position = tile.transform.position;
-            var bloodObject = Instantiate(bloodPrefab,
-                position: new Vector3(position.x, position.y, -2f),
-                Quaternion.identity);
+            var newCords = new Vector3(position.x, position.y, -2f);
+
+            var unitObject = Instantiate(bloodSprite,
+                position: newCords,
+                Quaternion.identity) as GameObject;
+
+            unitObject!.transform.parent = tile.transform;
+            unitObject!.name = $"Blood Sprite {newCords.x} {newCords.y}";
         }
 
         private void InstantiateBotDragonOnTile(BotDragon botDragon, Tile tile) {
@@ -130,6 +157,7 @@ namespace Scenes.Scripts.Field {
             if (unitComponent != null) {
                 var dragonSprite = dragonsSprite.Get(botDragon.Color);
                 unitComponent.Init(dragonSprite);
+                DragonSubscription(botDragon);
 
                 unitObject.transform.parent = tile.transform;
                 unitObject.name = $"{typeof(BotDragon).Name} {newCords.x} {newCords.y}";

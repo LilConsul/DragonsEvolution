@@ -82,10 +82,8 @@ namespace Scenes.Scripts.Field {
             if (typeof(T) == typeof(BotDragon))
                 return _dragons as T[,];
 
-            else {
-                Debug.LogWarning("Unsupported type requested for units field.");
-                return null;
-            }
+            Debug.LogWarning("Unsupported type requested for units field.");
+            return null;
         }
 
         public T[,] GetUnitsField<T>(int x, int y, int radius) {
@@ -98,10 +96,9 @@ namespace Scenes.Scripts.Field {
                 var remover = new RadiusRemover<BotDragon>();
                 return remover.RemoveRadius(_dragons, x, y, radius) as T[,];
             }
-            else {
-                Debug.LogWarning("Unsupported type requested for units field.");
-                return null;
-            }
+
+            Debug.LogWarning("Unsupported type requested for units field.");
+            return null;
         }
 
         public int Size() => _dragons.GetLength(0);
@@ -118,7 +115,6 @@ namespace Scenes.Scripts.Field {
                 dragon.Eat(_foods[x, y]);
                 _foods[x, y] = null;
             }
-
             return true;
         }
 
@@ -130,6 +126,7 @@ namespace Scenes.Scripts.Field {
             catch (IndexOutOfRangeException) {
                 return false;
             }
+
             return true;
         }
     }

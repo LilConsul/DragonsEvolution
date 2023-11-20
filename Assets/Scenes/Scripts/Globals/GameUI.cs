@@ -1,3 +1,4 @@
+using Scenes.Scripts.Enums;
 using Scenes.Scripts.Field;
 using Scenes.Scripts.Units;
 using UnityEngine;
@@ -7,36 +8,35 @@ namespace Scenes.Scripts.Globals {
         private AI _ai;
 
         private void Start() {
-            FieldContainer.Instance.SetSize(200);
-            
+            FieldContainer.Instance.SetSize(10);
+
             //FieldGenerator.Instance.GeneratePreset();
-            FieldGenerator.Instance.CustomGenerator(100, 2000);
-            
+            FieldGenerator.Instance.CustomGenerator(5, 0);
+
             FieldDrawer.Instance.DrawField();
             FieldDrawer.Instance.RenderUnits<BotDragon>();
             FieldDrawer.Instance.RenderUnits<Chicken>();
-            
+
             FieldContainer.Instance.StartGame();
             _ai = gameObject.AddComponent<AI>();
-            InvokeRepeating("BotUpdate", 1.0f, 0.5f);
+            InvokeRepeating("BotUpdate", 1.0f, 1.0f);
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
         private void BotUpdate() {
             var dragon = FieldContainer.Instance.GetNextDragon();
-            var nextMove = _ai.GetNextMove(dragon);
-            dragon.Move(nextMove.x, nextMove.y);
-            Print(dragon, _ai.TakeWeight());
 
-            
-            /*(int x, int y) = _ai.GetNextMove();
-            dragon.Move(x, y);*/
+            if (dragon.State == EntityState.Dead) dragon.Move(0, 0);
+            else {
+                var nextMove = _ai.GetNextMove(dragon);
+                dragon.Move(nextMove.x, nextMove.y);
+            }
+            //Print(dragon, _ai.TakeWeight());
+
             if (!FieldContainer.Instance.Add(dragon)) {
                 Debug.LogWarning($"Dragon on {dragon.Cords()} not moved!");
                 FieldContainer.Instance.ReturnMove(dragon);
             }
-
-            Debug.Log("Updating every second...");
         }
 
         private void Print(BotDragon who, int[,] input) {
