@@ -1,5 +1,6 @@
 using System;
 using Scenes.Scripts.Enums;
+using Scenes.Scripts.Globals;
 using Scenes.Scripts.Units;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -29,6 +30,11 @@ namespace Scenes.Scripts.Field {
                 var y = RandomCoordinate(size);
                 var dragon = gameObject.AddComponent<BotDragon>();
                 dragon.Initialization(x, y);
+
+                var settings = GlobalSettings.Instance;
+                dragon.Intellect = settings.basicIntellect;
+                dragon.Speed = settings.basicSpeed;
+                dragon.Health = settings.basicHealth;
                 
                 if (!container.Add(dragon)) i--;
                 else if(_gameStarted) OnDragonAdded?.Invoke(dragon);

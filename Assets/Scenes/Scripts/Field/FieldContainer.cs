@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Scenes.Scripts.Enums;
+using Scenes.Scripts.Globals;
 using Scenes.Scripts.Units;
 using UnityEngine;
 
@@ -117,7 +118,8 @@ namespace Scenes.Scripts.Field {
             _dragons[x, y] = dragon;
             if (_foods[x, y] != null) {
                 dragon.Eat(_foods[x, y]);
-                FoodFactory.Instance.SpawnFood();
+                if(GlobalSettings.Instance.spawnNewChickens) 
+                    FoodFactory.Instance.SpawnFood();
                 _foods[x, y] = null;
             }
 

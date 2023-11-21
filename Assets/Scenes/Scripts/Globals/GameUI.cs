@@ -1,3 +1,4 @@
+using System;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Field;
 using Scenes.Scripts.Units;
@@ -5,11 +6,14 @@ using UnityEngine;
 
 namespace Scenes.Scripts.Globals {
     public class GameUI : MonoBehaviour {
-        [SerializeField] private float botUpdateDelay;
+        private float botUpdateDelay;
         private AI _ai;
         private int _turns;
 
         private void Start() {
+            botUpdateDelay = GlobalSettings.Instance.delayTime;
+            GlobalSettings.Instance.gameIsOnline = true;
+            
             _turns = 0;
             FieldContainer.Instance.SetSize(15);
 
@@ -25,14 +29,23 @@ namespace Scenes.Scripts.Globals {
             Invoke(nameof(BotUpdate), botUpdateDelay);
         }
 
+        private void Update() {
+            if (Input.GetKey(KeyCode.Q)) {
+                FieldDrawer.Instance.DestroyField();
+                GlobalSettings.Instance.gameIsOnline = false;
+            }
+        }
+
         // ReSharper disable Unity.PerformanceAnalysis
         private void BotUpdate() {
+            if (!GlobalSettings.Instance.gameIsOnline) return;
             var dragon = FieldContainer.Instance.GetNextDragon();
 
             if (dragon.State == EntityState.Dead) {
                 dragon.Move(0, 0);
                 Invoke(nameof(BotUpdate), 0f);
-                FieldContainer.Instance.Add(dragon);
+                if (GlobalSettings.Instance.gameIsOnline)
+                    FieldContainer.Instance.Add(dragon);
                 return;
             }
 
@@ -51,7 +64,8 @@ namespace Scenes.Scripts.Globals {
                     FieldContainer.Instance.ReturnMove(dragon);
                 }
 
-                Invoke(nameof(BotUpdate), botUpdateDelay / 3);
+                if (GlobalSettings.Instance.gameIsOnline)
+                    Invoke(nameof(BotUpdate), botUpdateDelay / 3);
                 return;
             }
 
@@ -61,7 +75,8 @@ namespace Scenes.Scripts.Globals {
                 FieldContainer.Instance.ReturnMove(dragon);
             }
 
-            Invoke(nameof(BotUpdate), botUpdateDelay);
+            if (GlobalSettings.Instance.gameIsOnline)
+                Invoke(nameof(BotUpdate), botUpdateDelay);
         }
     }
 }

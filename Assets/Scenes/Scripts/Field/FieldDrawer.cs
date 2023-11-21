@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using JetBrains.Annotations;
 using Scenes.Scripts.Enums;
+using Scenes.Scripts.Globals;
 using Scenes.Scripts.Units;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,7 +11,7 @@ namespace Scenes.Scripts.Field {
     public class FieldDrawer : MonoBehaviour {
         public static FieldDrawer Instance;
 
-        private int _width = 16, _height = 9;
+        private int _size = 16;
         private Tile[,] _spawnedTiles;
         private BotDragon _previouslySpawned;
         [SerializeField] private Tile tilePrefab;
@@ -28,14 +29,13 @@ namespace Scenes.Scripts.Field {
             FoodFactory.Instance.OnFoodAdded += UpdateUnits;
             DragonFactory.Instance.OnDragonAdded += UpdateUnits;
             if (fieldContainer != null) {
-                _width = fieldContainer.Size();
-                _height = fieldContainer.Size();
+                _size = fieldContainer.Size();
             }
 
-            _spawnedTiles = new Tile[_width, _height];
+            _spawnedTiles = new Tile[_size, _size];
 
-            for (var i = 0; i < _width; i++) {
-                for (var j = 0; j < _height; j++) {
+            for (var i = 0; i < _size; i++) {
+                for (var j = 0; j < _size; j++) {
                     var isBase = (i % 2 == 0 && j % 2 != 0) || (i % 2 != 0 && j % 2 == 0);
                     tilePrefab.Init(isBase);
 
@@ -44,6 +44,18 @@ namespace Scenes.Scripts.Field {
                     spawnedTile.name = $"Tile {i} {j}";
                 }
             }
+        }
+
+        public void DestroyField() {
+            for (var i = 0; i < _spawnedTiles.GetLength(0); i++) {
+                for (var j = 0; j < _spawnedTiles.GetLength(1); j++) {
+                    var currentTile = _spawnedTiles[i, j];
+                    DestroyChild(currentTile);
+                    Destroy(currentTile.transform.gameObject);
+                }
+            }
+
+            _spawnedTiles = null;
         }
 
         public void RenderUnits<T>() where T : Component {
@@ -103,12 +115,13 @@ namespace Scenes.Scripts.Field {
         }
 
         private void BotDragonOnOnTimeToLiveEnd(BotDragon sender) {
-            if(_previouslySpawned == sender) return;
-            
+            if (_previouslySpawned == sender) return;
+
             _previouslySpawned = sender;
             var cords = sender.Cords();
             DestroyChild(_spawnedTiles[cords.x, cords.y]);
-            DragonFactory.Instance.SpawnDragons(1);
+            if (GlobalSettings.Instance.spawnNewDragons)
+                DragonFactory.Instance.SpawnDragons(1);
         }
 
         private void BotDragonOnDeath(BotDragon sender) {
@@ -116,8 +129,8 @@ namespace Scenes.Scripts.Field {
             DrawBlood(_spawnedTiles[cords.x, cords.y]);
         }
 
-        private void DestroyChild([NotNull] Tile tile) {
-            if (tile == null) throw new ArgumentNullException(nameof(tile));
+        private void DestroyChild(Tile tile) {
+            if (tile == null) return;
             var tileTransform = tile.transform;
             foreach (Transform childTransform in tileTransform) {
                 Destroy(childTransform.gameObject);
