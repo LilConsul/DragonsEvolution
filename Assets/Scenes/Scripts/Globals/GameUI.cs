@@ -26,6 +26,7 @@ namespace Scenes.Scripts.Globals {
             try {
                 if (!GlobalSettings.Instance.gameIsOnline) return;
                 var dragon = FieldContainer.Instance.GetNextDragon();
+                PlaceHolderController.Instance.ShowInfo(dragon);
 
                 if (dragon.State == EntityState.Dead) {
                     dragon.Move(0, 0);
@@ -44,7 +45,6 @@ namespace Scenes.Scripts.Globals {
                 }
 
                 if (_turns < dragon.Speed) {
-                    Debug.Log($"Current _truns: {_turns}, and max: {dragon.Speed}");
                     _turns++;
                     if (!FieldContainer.Instance.AddFirst(dragon)) {
                         Debug.LogWarning($"Dragon on {dragon.Cords()} not moved!");
