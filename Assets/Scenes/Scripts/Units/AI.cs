@@ -90,7 +90,7 @@ namespace Scenes.Scripts.Units {
                         }
 
                         if (myDrag.IsParent || _dragon.IsParent) {
-                            _weights[i, j] = -1;
+                            _weights[i, j] = 0;
                             continue;
                         }
                         _weights[i, j] = myDrag.Color == _dragon.Color ? -1 : 5;
