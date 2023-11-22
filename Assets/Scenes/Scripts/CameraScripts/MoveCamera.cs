@@ -39,7 +39,7 @@ namespace Scenes.Scripts.CameraScripts {
         }
 
         public void MoveTo(float x, float y) {
-            var newPosition = new Vector3(x, y, transform.position.z);
+            var newPosition = new Vector3(x, y, -20);
             transform.position = newPosition;
         }
     }

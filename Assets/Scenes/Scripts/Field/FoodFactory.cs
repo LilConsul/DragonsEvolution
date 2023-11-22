@@ -1,4 +1,5 @@
 using System;
+using Scenes.Scripts.Globals;
 using Scenes.Scripts.Units;
 using UnityEngine;
 using Random = System.Random;
@@ -13,8 +14,6 @@ namespace Scenes.Scripts.Field {
         
         private Random _random;
         private bool _gameStarted;
-        [SerializeField] private int minCalories;
-        [SerializeField] private int maxCalories;
         private void Awake() {
             Instance = this;
             _random = new Random();
@@ -40,7 +39,8 @@ namespace Scenes.Scripts.Field {
         }
         
         private int RandomCalories() {
-            return _random.Next(minCalories, maxCalories);
+            var setting = GlobalSettings.Instance;
+            return _random.Next(setting.minChicken, setting.maxChicken);
         }
     }
 }

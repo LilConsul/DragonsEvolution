@@ -21,7 +21,7 @@ namespace Scenes.Scripts.Field {
             Instance = this;
         }
 
-        public void SpawnDragons(int numDragons) {
+        public void SpawnDragons(int numDragons = 1) {
             var container = FieldContainer.Instance;
             var size = container.Size();
             
