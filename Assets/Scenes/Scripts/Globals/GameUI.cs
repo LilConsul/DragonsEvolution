@@ -44,6 +44,7 @@ namespace Scenes.Scripts.Globals {
                 }
 
                 if (_turns < dragon.Speed) {
+                    Debug.Log($"Current _truns: {_turns}, and max: {dragon.Speed}");
                     _turns++;
                     if (!FieldContainer.Instance.AddFirst(dragon)) {
                         Debug.LogWarning($"Dragon on {dragon.Cords()} not moved!");

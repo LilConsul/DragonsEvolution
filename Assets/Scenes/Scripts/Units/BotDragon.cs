@@ -21,38 +21,49 @@ namespace Scenes.Scripts.Units {
         public double Health {
             get => _health;
             set {
-                if (value > 0)
+                if (value > 5) {
                     _health = value;
+                    return;
+                }
                 _health = 5;
             }
         }
+
         public double Speed {
             get => _speed;
             set {
-                if (value > 0)
+                if (value > 1) {
                     _speed = value;
+                    return;
+                }
                 _speed = 1;
             }
         }
+
         public double Intellect {
             get => _intelligence;
             set {
-                if (value > 0)
+                if (value > 3){
                     _intelligence = value;
+                    return;
+                }
                 _intelligence = 3;
             }
         }
+
         public EntityState State { get; private set; }
 
         public delegate void DragonAction(BotDragon sender);
+
         public delegate void DragonBirth(BotDragon sender, int x, int y);
+
         public event DragonAction OnTimeToLiveEnd;
         public event DragonAction OnDeath;
         public event DragonBirth OnMate;
 
         public Colors Color { get; set; }
 
-       public void Initialization(int x, int y) {
+        public void Initialization(int x, int y) {
             TimeToLive = 5;
             Color = GetRandomColor();
             State = EntityState.Alive;
@@ -65,13 +76,14 @@ namespace Scenes.Scripts.Units {
             _x = x;
             _y = y;
         }
-       
+
         public void Move(int delX, int delY) {
             if (State == EntityState.Dead) {
                 TimeToLive -= 1;
-                if (TimeToLive < 0){
+                if (TimeToLive < 0) {
                     OnTimeToLiveEnd?.Invoke(this);
                 }
+
                 return;
             }
 
@@ -105,7 +117,7 @@ namespace Scenes.Scripts.Units {
         public void Mate(int delX, int delY) {
             OnMate?.Invoke(this, _x + delX, _y + delY);
         }
-        
+
         private Colors GetRandomColor() {
             var colors = Enum.GetValues(typeof(Colors));
             return (Colors)colors.GetValue(UnityEngine.Random.Range(0, colors.Length - 1));
