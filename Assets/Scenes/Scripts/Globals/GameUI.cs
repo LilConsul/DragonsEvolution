@@ -1,4 +1,5 @@
 using System;
+using Scenes.Scripts.CameraScripts;
 using Scenes.Scripts.Enums;
 using Scenes.Scripts.Field;
 using Scenes.Scripts.Units;
@@ -26,6 +27,9 @@ namespace Scenes.Scripts.Globals {
 
             FieldContainer.Instance.StartGame();
             _ai = gameObject.AddComponent<AI>();
+            CameraMove();
+            
+            
             Invoke(nameof(BotUpdate), botUpdateDelay);
         }
 
@@ -77,6 +81,11 @@ namespace Scenes.Scripts.Globals {
 
             if (GlobalSettings.Instance.gameIsOnline)
                 Invoke(nameof(BotUpdate), botUpdateDelay);
+        }
+
+        private void CameraMove() {
+            var cords = FieldDrawer.Instance.GetCentralPosition();
+            MoveCamera.Instance.MoveTo(cords.x, cords.y);
         }
     }
 }

@@ -58,6 +58,18 @@ namespace Scenes.Scripts.Field {
             _spawnedTiles = null;
         }
 
+        public (float x, float y) GetCentralPosition() {
+            var centerX = (_size - 1) / 2;
+            var centerY = (_size - 1) / 2;
+            if (_size % 2 != 0) {
+                centerX = _size / 2;
+                centerY = _size / 2;
+            }
+
+            var position = _spawnedTiles[centerX, centerY].transform.position;
+            return (position.x, position.y);
+        }
+
         public void RenderUnits<T>() where T : Component {
             var fieldContainer = FieldContainer.Instance;
             var units = fieldContainer.GetUnitsField<T>();

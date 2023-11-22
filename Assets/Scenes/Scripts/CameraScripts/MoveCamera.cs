@@ -2,11 +2,16 @@ using UnityEngine;
 
 namespace Scenes.Scripts.CameraScripts {
     public class MoveCamera : MonoBehaviour {
+        public static MoveCamera Instance;
         private Vector3 _currentPosition;
         [SerializeField] private float cameraSpeed;
         [SerializeField] private float zoomSpeed;
         [SerializeField] private float minZoom;
         private Camera _camera;
+
+        private void Awake() {
+            Instance = this;
+        }
 
         private void Start() {
             _camera = Camera.main;
@@ -31,6 +36,11 @@ namespace Scenes.Scripts.CameraScripts {
                 _currentPosition.x += cameraSpeed / 50;
 
             transform.position = _currentPosition;
+        }
+
+        public void MoveTo(float x, float y) {
+            var newPosition = new Vector3(x, y, transform.position.z);
+            transform.position = newPosition;
         }
     }
 }
