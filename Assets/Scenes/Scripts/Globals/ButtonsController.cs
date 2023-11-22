@@ -38,7 +38,7 @@ namespace Scenes.Scripts.Globals {
             //restartGame.onClick.AddListener(delegate { GameUI.Instance.RestartGame(); });
 
             health.onValueChanged.AddListener(delegate(string newValue) {
-                if (!int.TryParse(newValue, out int healthValue) || healthValue < 3) {
+                if (!int.TryParse(newValue, out var healthValue) || healthValue < 3) {
                     health.text = "3";
                     GlobalSettings.Instance.basicHealth = 3;
                 }
@@ -48,7 +48,7 @@ namespace Scenes.Scripts.Globals {
             });
 
             speed.onValueChanged.AddListener(delegate(string newValue) {
-                if (!int.TryParse(newValue, out int speedValue) || speedValue < 1) {
+                if (!int.TryParse(newValue, out var speedValue) || speedValue < 1) {
                     speed.text = "1";
                     GlobalSettings.Instance.basicSpeed = 1;
                 }
@@ -58,7 +58,7 @@ namespace Scenes.Scripts.Globals {
             });
 
             intellect.onValueChanged.AddListener(delegate(string newValue) {
-                if (!int.TryParse(newValue, out int intellectValue) || intellectValue < 3) {
+                if (!int.TryParse(newValue, out var intellectValue) || intellectValue < 3) {
                     intellect.text = "3";
                     GlobalSettings.Instance.basicIntellect = 3;
                 }
@@ -69,7 +69,7 @@ namespace Scenes.Scripts.Globals {
 
 
             minChicken.onValueChanged.AddListener(delegate(string newValue) {
-                if (!int.TryParse(newValue, out int minFood) || minFood < 10 || minFood > GlobalSettings.Instance.maxChicken) {
+                if (!int.TryParse(newValue, out var minFood) || minFood < 10 || minFood > GlobalSettings.Instance.maxChicken) {
                     minChicken.text = "10";
                     GlobalSettings.Instance.minChicken = 10;
                 }
@@ -79,7 +79,7 @@ namespace Scenes.Scripts.Globals {
             });
 
             maxChicken.onValueChanged.AddListener(delegate(string newValue) {
-                if (!int.TryParse(newValue, out int maxFood) || maxFood > 200 || maxFood < GlobalSettings.Instance.minChicken) {
+                if (!int.TryParse(newValue, out var maxFood) || maxFood > 200 || maxFood < GlobalSettings.Instance.minChicken) {
                     minChicken.text = "200";
                     GlobalSettings.Instance.maxChicken = 200;
                 }
@@ -89,7 +89,7 @@ namespace Scenes.Scripts.Globals {
             });
             
             fieldSize.onValueChanged.AddListener(delegate(string newValue) {
-                if (!uint.TryParse(newValue, out uint size) || size < 9 || size > 100) {
+                if (!uint.TryParse(newValue, out var size) || size < 9 || size > 100) {
                     fieldSize.text = "9";
                     GlobalSettings.Instance.fieldSize = 9;
                 }

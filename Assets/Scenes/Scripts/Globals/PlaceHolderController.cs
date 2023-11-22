@@ -1,3 +1,4 @@
+using System;
 using Scenes.Scripts.Units;
 using UnityEngine;
 using TMPro;
@@ -14,9 +15,9 @@ namespace Scenes.Scripts.Globals {
         public void ShowInfo(BotDragon dragon) {
             statHolder.text = $"Dragon on {dragon.Cords()} \n" +
                               $"Color: {dragon.Color}\n" +
-                              $"Health: {dragon.Health}\n" +
-                              $"Speed: {dragon.Speed}\n" +
-                              $"Intellect: {dragon.Intellect}";
+                              $"Health: {MathF.Round((float)dragon.Health, 2)}\n" +
+                              $"Speed: {(int)dragon.Speed}\n" +
+                              $"Intellect: {(int)dragon.Intellect}";
         }
     }
 }
