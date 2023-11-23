@@ -69,9 +69,9 @@ namespace Scenes.Scripts.Globals {
 
 
             minChicken.onValueChanged.AddListener(delegate(string newValue) {
-                if (!int.TryParse(newValue, out var minFood) || minFood < 10 || minFood > GlobalSettings.Instance.maxChicken) {
-                    minChicken.text = "10";
-                    GlobalSettings.Instance.minChicken = 10;
+                if (!int.TryParse(newValue, out var minFood) || minFood < 3 || minFood > GlobalSettings.Instance.maxChicken) {
+                    minChicken.text = "";
+                    GlobalSettings.Instance.minChicken = 3;
                 }
                 else {
                     GlobalSettings.Instance.minChicken = minFood;
@@ -79,9 +79,9 @@ namespace Scenes.Scripts.Globals {
             });
 
             maxChicken.onValueChanged.AddListener(delegate(string newValue) {
-                if (!int.TryParse(newValue, out var maxFood) || maxFood > 200 || maxFood < GlobalSettings.Instance.minChicken) {
-                    minChicken.text = "200";
-                    GlobalSettings.Instance.maxChicken = 200;
+                if (!int.TryParse(newValue, out var maxFood) || maxFood > 1000 || maxFood < GlobalSettings.Instance.minChicken) {
+                    maxChicken.text = $"{GlobalSettings.Instance.minChicken + 10}";
+                    GlobalSettings.Instance.maxChicken = GlobalSettings.Instance.minChicken + 10;
                 }
                 else {
                     GlobalSettings.Instance.maxChicken = maxFood;
