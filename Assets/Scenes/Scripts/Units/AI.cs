@@ -34,6 +34,7 @@ namespace Scenes.Scripts.Units {
         }
 
         public (int x, int y, bool mate) GetNextMove(BotDragon dragon) {
+            if (dragon.State == EntityState.Child) return (0, 0, false);
             SetInitialization(dragon);
             var sortedMoves = SortedMoves();
             if (_sameResults) {
@@ -84,7 +85,7 @@ namespace Scenes.Scripts.Units {
 
                     if (_dragons[i, j] != null) {
                         var myDrag = _dragons[i, j];
-                        if (myDrag.State == EntityState.Dead) {
+                        if (myDrag.State is EntityState.Dead or EntityState.Child) {
                             _weights[i, j] = 0;
                             continue;
                         }

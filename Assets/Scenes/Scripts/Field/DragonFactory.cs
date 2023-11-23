@@ -55,6 +55,7 @@ namespace Scenes.Scripts.Field {
 
             var dragon = gameObject.AddComponent<BotDragon>();
             dragon.Initialization(cords.x, cords.y);
+            dragon.State = EntityState.Child;
             dragon.Color = color;
             dragon.Health = food;
             dragon.Speed = speed;

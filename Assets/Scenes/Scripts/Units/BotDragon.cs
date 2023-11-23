@@ -18,6 +18,9 @@ namespace Scenes.Scripts.Units {
         private double _speed;
         private double _intelligence;
 
+        private int _isChild;
+        [SerializeField] private EntityState _state;
+
         public double Health {
             get => _health;
             set {
@@ -51,7 +54,14 @@ namespace Scenes.Scripts.Units {
             }
         }
 
-        public EntityState State { get; private set; }
+        public EntityState State {
+            get => _state;
+            set {
+                if (value == EntityState.Child)
+                    _isChild = 3;
+                _state = value;
+            }
+        }
 
         public delegate void DragonAction(BotDragon sender);
 
@@ -78,6 +88,12 @@ namespace Scenes.Scripts.Units {
         }
 
         public void Move(int delX, int delY) {
+            if (State == EntityState.Child) {
+                _isChild -= 1;
+                if (_isChild < 0)
+                    State = EntityState.Alive;
+                return;
+            }
             if (State == EntityState.Dead) {
                 TimeToLive -= 1;
                 if (TimeToLive < 0) {

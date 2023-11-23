@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Scenes.Scripts.Enums {
     [Serializable]
@@ -12,12 +11,20 @@ namespace Scenes.Scripts.Enums {
         [SerializeField] private Sprite green;
         [SerializeField] private Sprite blue;
         [SerializeField] private Sprite red;
+        
+        [SerializeField] private Sprite orangeEgg;
+        [SerializeField] private Sprite pinkEgg;
+        [SerializeField] private Sprite purpleEgg;
+        [SerializeField] private Sprite greenEgg;
+        [SerializeField] private Sprite blueEgg;
+        [SerializeField] private Sprite redEgg;
+
+        
         [SerializeField] private Sprite dead;
         
-        private Dictionary<Colors, Sprite> _colorMap;
         
         public Sprite Get(Colors color) {
-            _colorMap = new Dictionary<Colors, Sprite> {
+            var colorMap = new Dictionary<Colors, Sprite> {
                 { Colors.Orange, orange },
                 { Colors.Pink, pink },
                 { Colors.Purple, purple },
@@ -26,7 +33,19 @@ namespace Scenes.Scripts.Enums {
                 { Colors.Red, red },
                 { Colors.Dead, dead}
             };
-            return _colorMap[color];
+            return colorMap[color];
+        }
+
+        public Sprite GetEgg(Colors color) {
+            var eggMap = new Dictionary<Colors, Sprite>() {
+                { Colors.Orange, orangeEgg },
+                { Colors.Pink, pinkEgg },
+                { Colors.Purple, purpleEgg },
+                { Colors.Green, greenEgg },
+                { Colors.Blue, blueEgg },
+                { Colors.Red, redEgg }
+            };
+            return eggMap[color];
         }
 
         public Colors RandomColor() {

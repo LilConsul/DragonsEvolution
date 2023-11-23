@@ -175,6 +175,8 @@ namespace Scenes.Scripts.Field {
             var unitComponent = unitObject!.GetComponent<BotDragon>();
             if (unitComponent != null) {
                 var dragonSprite = dragonsSprite.Get(botDragon.Color);
+                if (botDragon.State == EntityState.Child)
+                    dragonSprite = dragonsSprite.GetEgg(botDragon.Color);
                 unitComponent.Init(dragonSprite);
                 DragonSubscription(botDragon);
 

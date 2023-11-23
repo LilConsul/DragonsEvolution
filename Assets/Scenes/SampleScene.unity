@@ -7191,6 +7191,30 @@ PrefabInstance:
       propertyPath: dragonsSprite.purple
       value: 
       objectReference: {fileID: 21300000, guid: 7a538466090a16e4fb5c07bf783783da, type: 3}
+    - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+      propertyPath: dragonsSprite.redEgg
+      value: 
+      objectReference: {fileID: 21300000, guid: 0a6e0bcee2303f14ea94a6d44104728b, type: 3}
+    - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+      propertyPath: dragonsSprite.blueEgg
+      value: 
+      objectReference: {fileID: 21300000, guid: d876e079d16ba96489484c9e2a964912, type: 3}
+    - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+      propertyPath: dragonsSprite.pinkEgg
+      value: 
+      objectReference: {fileID: 21300000, guid: 9ba55a6bbef71924f9cfee78a113205f, type: 3}
+    - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+      propertyPath: dragonsSprite.greenEgg
+      value: 
+      objectReference: {fileID: 21300000, guid: fab0c1584617d6544bcb34673e033bf3, type: 3}
+    - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+      propertyPath: dragonsSprite.orangeEgg
+      value: 
+      objectReference: {fileID: 21300000, guid: 6866669e20b3ffb4e871d5487a88a34e, type: 3}
+    - target: {fileID: 8045311537698477637, guid: 7fbc39997b91283469cb91173e727035, type: 3}
+      propertyPath: dragonsSprite.purpleEgg
+      value: 
+      objectReference: {fileID: 21300000, guid: a7908b5f880f874498bfff414c9d9670, type: 3}
     - target: {fileID: 9014934541302559645, guid: 7fbc39997b91283469cb91173e727035, type: 3}
       propertyPath: m_Name
       value: FieldDrawer
