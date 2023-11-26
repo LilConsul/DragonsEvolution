@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Scenes.Scripts.Units {
     public class BotDragon : MonoBehaviour {
         [SerializeField] private SpriteRenderer _renderer;
-        public int TimeToLive { get; private set; }
+        public int TimeToLive { get; set; }
         public bool IsParent { get; set; }
         private Food _prevEaten;
         private int _prevX;
@@ -58,7 +58,7 @@ namespace Scenes.Scripts.Units {
             get => _state;
             set {
                 if (value == EntityState.Child)
-                    _isChild = 3;
+                    _isChild = 3 * (int)Speed;
                 _state = value;
             }
         }
@@ -125,11 +125,7 @@ namespace Scenes.Scripts.Units {
             _prevEaten = food;
             _health += food.GetCalories();
         }
-
-        public EntityState GetState() {
-            return State;
-        }
-
+        
         public void Mate(int delX, int delY) {
             OnMate?.Invoke(this, _x + delX, _y + delY);
         }

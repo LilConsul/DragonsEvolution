@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Scenes.Scripts.Units {
     public class Food : MonoBehaviour {
-        [SerializeField] private SpriteRenderer _renderer;
         private int _x;
         private int _y;
         private int _calories;

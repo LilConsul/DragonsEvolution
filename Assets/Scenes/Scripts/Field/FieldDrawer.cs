@@ -133,7 +133,7 @@ namespace Scenes.Scripts.Field {
             var cords = sender.Cords();
             DestroyChild(_spawnedTiles[cords.x, cords.y]);
             if (GlobalSettings.Instance.spawnNewDragons)
-                DragonFactory.Instance.SpawnDragons(1);
+                DragonFactory.Instance.SpawnDragons();
         }
 
         private void BotDragonOnDeath(BotDragon sender) {
